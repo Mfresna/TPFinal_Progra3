@@ -15,7 +15,9 @@ Trabajo Practico de Programacion 3 - UTN MdP
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para cumplir con estas funcionalidades, el administrador deberá contar con la capacidad de listar las solicitudes pendientes de los usuarios para ser administradores y ver la información proporcionada por estos para decidir si se aprueba o rechaza la solicitud.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El usuario registrado en su cuenta, tanto con el rol básico como el rol de arquitecto, podrá visualizar todas las obras e ingresar a su información detallada, además deberá poder guardar sus obras preferidas, las cuales quedarán asociadas a su cuenta para poder consultar el listado de favoritos y así visualizar más rápidamente dichas obras. Además, podrá filtrar las obras que estén en su radio cercano (en base a su IP desde donde se consulta), podrá filtrar por estudio de arquitectura, por estado y por año de su estado.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La aplicación en su despliegue inicial contará con un usuario “maestro” el cual contendrá usuario y password por defecto la cual se le solicitará cambiarla en el primer inicio. Será este administrador el encargado de asignar usuarios como administradores en caso de necesitar más de un administrador. Este usuario debe ser imborrable y su privilegio de administrador irrevocable.<br>
+
 ---
+
 ### Roles y Permisos:
 
 #### Usuarios

@@ -1,5 +1,6 @@
 package TpFinal_Progra3;
 
+import TpFinal_Progra3.enums.CategoriaObra;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ArquiTourBackendApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(ArquiTourBackendApplication.class, args);
 
 	}

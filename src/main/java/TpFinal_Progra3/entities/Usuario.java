@@ -1,5 +1,6 @@
 package TpFinal_Progra3.entities;
 
+import TpFinal_Progra3.enums.RolUsuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,5 +1,7 @@
 package TpFinal_Progra3.entities;
 
+import TpFinal_Progra3.enums.CategoriaObra;
+import TpFinal_Progra3.enums.EstadoObra;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

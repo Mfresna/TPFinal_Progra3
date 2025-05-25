@@ -21,7 +21,7 @@ public class Obra {
 
     @Column(nullable = false)
     @NotBlank(message = "El nombre de la Obra no puede estar vacio.")
-    @Size(min = 6)
+    @Size(min =2)
     private String nombre;
 
     @Column(nullable = false)
@@ -44,7 +44,7 @@ public class Obra {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     @NotBlank(message = "Debe ingresar una descripcion de la Obra.")
-    @Size(min = 20, max = 10000)
+    @Size(max = 16000000)
     private String descripcion;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

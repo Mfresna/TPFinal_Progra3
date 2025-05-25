@@ -1,6 +1,7 @@
 package TpFinal_Progra3.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public class EstudioArquitectura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    @NotBlank(message = "El nombre del estudio no puede estar vacio.")
     private String nombre;
 
     @OneToMany(mappedBy = "estudio")

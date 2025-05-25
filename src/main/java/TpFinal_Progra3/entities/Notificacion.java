@@ -16,10 +16,15 @@ public class Notificacion {
     private Long id;
 
     //NO SE USA RELACIONES JPA PARA NO SOBRECARGAR EL OBJETO NOTIFICACION
+    @Column(nullable = false)
     private Long idEmisor; //PK de usuario Emisor
+
+    @Column(nullable = false)
     private Long idReceptor; //PK de usuario Receptor
 
     private String mensaje;
     private LocalDateTime fecha;
-    private Boolean leido;
+
+    @Column(nullable = false)
+    private Boolean isLeido = false;
 }

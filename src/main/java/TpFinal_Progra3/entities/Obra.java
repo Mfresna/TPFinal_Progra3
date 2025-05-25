@@ -3,6 +3,8 @@ package TpFinal_Progra3.entities;
 import TpFinal_Progra3.enums.CategoriaObra;
 import TpFinal_Progra3.enums.EstadoObra;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
@@ -17,18 +19,32 @@ public class Obra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    @NotBlank(message = "El nombre de la Obra no puede estar vacio.")
+    @Size(min = 6)
     private String nombre;
+
+    @Column(nullable = false)
+    @NotBlank
     private Double latitud;
+
+    @Column(nullable = false)
+    @NotBlank
     private Double longitud;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private EstadoObra estado;
 
     private Integer anioEstado;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CategoriaObra categoria;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
+    @NotBlank(message = "Debe ingresar una descripcion de la Obra.")
+    @Size(min = 20, max = 10000)
     private String descripcion;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

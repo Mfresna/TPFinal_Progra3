@@ -1,4 +1,4 @@
-package TpFinal_Progra3.utils;
+package TpFinal_Progra3.services;
 
 import TpFinal_Progra3.exceptions.EmailNoEnviadoException;
 import jakarta.mail.internet.MimeMessage;

@@ -1,4 +1,4 @@
-package TpFinal_Progra3.utils;
+package TpFinal_Progra3.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

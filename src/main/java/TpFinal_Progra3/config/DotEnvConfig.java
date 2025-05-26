@@ -14,5 +14,6 @@ public class DotEnvConfig {
         System.setProperty("spring.mail.username", dotenv.get("EMAIL"));
         System.setProperty("spring.mail.password", dotenv.get("EMAIL_PASSWORD"));
 
+        System.setProperty("jwt.secret.key", dotenv.get("JWT_SECRET"));
     }
 }

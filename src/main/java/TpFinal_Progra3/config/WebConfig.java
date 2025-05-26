@@ -1,5 +1,5 @@
 //No es necesario solo se usa en front-end
-
+/*
 package TpFinal_Progra3.config;
 
 
@@ -22,3 +22,4 @@ public class WebConfig {
         };
     }
 }
+*/

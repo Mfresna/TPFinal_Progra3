@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class ResetPassUtil {
+public class ResetPassService {
 
     public String generarToken(Long userId) {
         return Jwts.builder()

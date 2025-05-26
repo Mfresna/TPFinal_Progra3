@@ -11,5 +11,8 @@ public class DotEnvConfig {
         System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
         System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
 
+        System.setProperty("spring.mail.username", dotenv.get("EMAIL"));
+        System.setProperty("spring.mail.password", dotenv.get("EMAIL_PASSWORD"));
+
     }
 }

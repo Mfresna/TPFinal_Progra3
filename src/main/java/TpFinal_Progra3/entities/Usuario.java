@@ -4,6 +4,7 @@ import TpFinal_Progra3.enums.RolUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -46,7 +47,12 @@ public class Usuario {
     @NotBlank(message = "El nombre no puede estar vacio")
     private String nombre;
 
+    @Column(nullable = false, length = 20)
+    @NotBlank(message = "El apellido no puede estar vacio")
     private String apellido;
+
+    @Column(nullable = false)
+    @Past(message = "La fecha de nacimiento debe ser anterior a hoy")
     private LocalDate fechaNacimiento;
 
     @Column(nullable = false)

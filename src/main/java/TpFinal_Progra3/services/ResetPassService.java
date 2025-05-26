@@ -1,4 +1,4 @@
-package TpFinal_Progra3.services;
+/*package TpFinal_Progra3.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,3 +27,4 @@ public class ResetPassService {
         return Long.parseLong(claims.getSubject()); // Retorna el ID del usuario si el token es válido
     }
 }
+*/

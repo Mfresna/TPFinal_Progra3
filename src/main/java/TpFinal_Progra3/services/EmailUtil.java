@@ -1,4 +1,4 @@
-package TpFinal_Progra3.utils;
+package TpFinal_Progra3.services;
 
 import TpFinal_Progra3.exceptions.EmailNoEnviadoException;
 import jakarta.mail.internet.MimeMessage;
@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService {
+public class EmailUtil {
 
     @Autowired
     private JavaMailSender mailSender;

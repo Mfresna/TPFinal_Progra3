@@ -1,7 +1,7 @@
 package TpFinal_Progra3;
 
 import TpFinal_Progra3.config.DotEnvConfig;
-import TpFinal_Progra3.utils.EmailService;
+import TpFinal_Progra3.services.EmailUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,11 @@ class EmailSenderTest {
     }
 
     @Autowired
-    private EmailService enviarmail;
+    private EmailUtil enviarmail;
 
     @Test
     void enviarMailTest() {
-        //enviarmail.mailResetPass("afuentes0491@gmail.com","ESTE ES UN TOKEN");
+        enviarmail.mailResetPass("afuentes0491@gmail.com","ESTE ES UN TOKEN");
         System.out.println("HOLA");
     }
 

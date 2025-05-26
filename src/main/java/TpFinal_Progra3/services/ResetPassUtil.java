@@ -1,4 +1,4 @@
-package TpFinal_Progra3.utils;
+package TpFinal_Progra3.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class ResetPassService {
+public class ResetPassUtil {
 
     public String generarToken(Long userId) {
         return Jwts.builder()

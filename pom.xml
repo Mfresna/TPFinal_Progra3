@@ -67,6 +67,7 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Dependencias Externas -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -77,6 +78,13 @@
 			<artifactId>java-dotenv</artifactId>
 			<version>5.2.2</version>
 		</dependency>
+
+		<!-- Dependencia de Email -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

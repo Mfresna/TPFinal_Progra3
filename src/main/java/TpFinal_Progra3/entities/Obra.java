@@ -4,6 +4,7 @@ import TpFinal_Progra3.enums.CategoriaObra;
 import TpFinal_Progra3.enums.EstadoObra;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -25,11 +26,11 @@ public class Obra {
     private String nombre;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotNull
     private Double latitud;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotNull
     private Double longitud;
 
     @Enumerated(EnumType.STRING)
@@ -57,5 +58,6 @@ public class Obra {
 
     @ManyToOne
     @JoinColumn(name = "estudioarq_id") // Clave foránea en la tabla Obra
+    @NotNull(message = "El estudio asociado no puede ser nulo.")
     private EstudioArquitectura estudio;
 }

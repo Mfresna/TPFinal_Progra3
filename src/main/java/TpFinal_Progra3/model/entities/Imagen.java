@@ -1,7 +1,6 @@
-package TpFinal_Progra3.entities;
+package TpFinal_Progra3.model.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -9,16 +8,17 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Imagen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    //@NotBlank
     private String nombre;
     private String tipo; // Puede ser JPG, PNG, etc.
 
     @Column(unique = true, nullable = false)
-    @NotBlank
+    //@NotBlank
     private String url;
 }

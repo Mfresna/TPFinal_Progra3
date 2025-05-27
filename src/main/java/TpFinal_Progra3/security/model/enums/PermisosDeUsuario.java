@@ -1,0 +1,18 @@
+package TpFinal_Progra3.security.model.enums;
+
+public enum PermisosDeUsuario {
+    VER_OBRAS,
+    CREAR_ESTUDIO,
+    APROBAR_SOLICITUDES,
+    ACTUALIZAR_USUARIOS,
+    ALTA_OBRAS,
+    ACTUALIZAR_OBRAS,
+    BORRAR_OBRAS,
+    ALTA_SUS_OBRAS,
+    ACTUALIZAR_SUS_OBRAS,
+    BORRAR_SUS_OBRAS,
+    VER_USUARIOS,
+    CREAR_USUARIO,
+    ACTUALIZAR_USUARIO,
+    ELIMINAR_USUARIO
+}

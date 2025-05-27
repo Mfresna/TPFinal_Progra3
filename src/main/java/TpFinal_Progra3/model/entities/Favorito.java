@@ -1,9 +1,8 @@
-package TpFinal_Progra3.entities;
+package TpFinal_Progra3.model.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,13 +15,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Favorito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre de la lista no puede estar vacio")
-    @Size(max = 100)
+    //@NotBlank(message = "El nombre de la lista no puede estar vacio")
+    //@Size(max = 100)
     private String nombreLista;
 
     @ManyToMany

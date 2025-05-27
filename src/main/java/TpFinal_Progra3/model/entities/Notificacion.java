@@ -1,4 +1,4 @@
-package TpFinal_Progra3.entities;
+package TpFinal_Progra3.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Notificacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

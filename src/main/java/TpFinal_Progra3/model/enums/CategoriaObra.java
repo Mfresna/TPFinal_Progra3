@@ -1,4 +1,4 @@
-package TpFinal_Progra3.enums;
+package TpFinal_Progra3.model.enums;
 
 import lombok.Getter;
 

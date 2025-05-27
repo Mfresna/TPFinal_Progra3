@@ -1,9 +1,7 @@
 package TpFinal_Progra3.repositoryTesters;
-import TpFinal_Progra3.config.DotEnvConfig;
-import TpFinal_Progra3.entities.Usuario;
-import TpFinal_Progra3.enums.RolUsuario;
+import TpFinal_Progra3.model.entities.Usuario;
+import TpFinal_Progra3.security.model.enums.RolUsuario;
 import TpFinal_Progra3.repositories.UsuarioRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UsuarioRepositoryTest {
 
-    @BeforeAll
-    static void setup() {
-        DotEnvConfig.load();
-    }// Cargar variables de entorno antes de los test
-
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -29,7 +22,6 @@ class UsuarioRepositoryTest {
     void testGuardarUsuario() {
         Usuario usuario = new Usuario();
         usuario.setEmail("test@email.com");
-        usuario.setPassword("SecurePass123");
         usuario.setNombre("Agustina");
         usuario.setApellido("Gomez");
         usuario.setRol(RolUsuario.ROL_ARQUITECTO);
@@ -70,7 +62,6 @@ class UsuarioRepositoryTest {
         // Crear usuarios
         Usuario usuarioActivo = new Usuario();
         usuarioActivo.setEmail("activo@email.com");
-        usuarioActivo.setPassword("SecurePass123");
         usuarioActivo.setNombre("Laura");
         usuarioActivo.setApellido("Fernandez");
         usuarioActivo.setIsActivo(true);
@@ -79,7 +70,6 @@ class UsuarioRepositoryTest {
 
         Usuario usuarioInactivo = new Usuario();
         usuarioInactivo.setEmail("inactivo@email.com");
-        usuarioInactivo.setPassword("SecurePass123");
         usuarioInactivo.setNombre("Carlos");
         usuarioInactivo.setApellido("Perez");
         usuarioInactivo.setIsActivo(false);

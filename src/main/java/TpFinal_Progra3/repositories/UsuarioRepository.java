@@ -1,8 +1,7 @@
 package TpFinal_Progra3.repositories;
 
-import TpFinal_Progra3.entities.Usuario;
-import TpFinal_Progra3.enums.RolUsuario;
-import jakarta.validation.constraints.NotNull;
+import TpFinal_Progra3.model.entities.Usuario;
+import TpFinal_Progra3.security.model.enums.RolUsuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

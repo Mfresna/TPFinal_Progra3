@@ -1,8 +1,8 @@
 package TpFinal_Progra3.repositories;
 
-import TpFinal_Progra3.entities.Obra;
-import TpFinal_Progra3.enums.CategoriaObra;
-import TpFinal_Progra3.enums.EstadoObra;
+import TpFinal_Progra3.model.entities.Obra;
+import TpFinal_Progra3.model.enums.CategoriaObra;
+import TpFinal_Progra3.model.enums.EstadoObra;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

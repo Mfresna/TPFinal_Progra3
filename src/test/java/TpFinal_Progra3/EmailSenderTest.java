@@ -1,6 +1,7 @@
 package TpFinal_Progra3;
 
 import TpFinal_Progra3.config.DotEnvConfig;
+import TpFinal_Progra3.security.services.JwtService;
 import TpFinal_Progra3.services.EmailService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,11 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class EmailSenderTest {
-
-    @BeforeAll
-    static void setup() {
-        DotEnvConfig.load();
-    }
 
     @Autowired
     private EmailService enviarmail;

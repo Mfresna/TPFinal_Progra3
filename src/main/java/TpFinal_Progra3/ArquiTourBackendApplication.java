@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ArquiTourBackendApplication {
 
 	public static void main(String[] args) {
-
-		DotEnvConfig.load();
 		SpringApplication.run(ArquiTourBackendApplication.class, args);
 	}
 

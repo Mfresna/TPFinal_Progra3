@@ -1,18 +1,27 @@
 package TpFinal_Progra3.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.context.annotation.Configuration;
 
+import java.util.Objects;
+
+@Configuration
 public class DotEnvConfig {
-    public static void load() {
+
+    //Como es un bloque static en una clase Configuration se ejecute antes que todo
+    static {
+
         Dotenv dotenv = Dotenv.load();
 
         //Carga las Variables en el sistema
-        System.setProperty("spring.datasource.url", dotenv.get("DB_URL"));
-        System.setProperty("spring.datasource.username", dotenv.get("DB_USERNAME"));
-        System.setProperty("spring.datasource.password", dotenv.get("DB_PASSWORD"));
+        System.setProperty("spring.datasource.url", Objects.requireNonNull(dotenv.get("DB_URL")));
+        System.setProperty("spring.datasource.username", Objects.requireNonNull(dotenv.get("DB_USERNAME")));
+        System.setProperty("spring.datasource.password", Objects.requireNonNull(dotenv.get("DB_PASSWORD")));
 
-        System.setProperty("spring.mail.username", dotenv.get("EMAIL"));
-        System.setProperty("spring.mail.password", dotenv.get("EMAIL_PASSWORD"));
+        System.setProperty("spring.mail.username", Objects.requireNonNull(dotenv.get("EMAIL")));
+        System.setProperty("spring.mail.password", Objects.requireNonNull(dotenv.get("EMAIL_PASSWORD")));
+
+        System.setProperty("jwt.secret", Objects.requireNonNull(dotenv.get("JWT_SECRET")));
 
         System.setProperty("jwt.secret.key", dotenv.get("JWT_SECRET"));
     }

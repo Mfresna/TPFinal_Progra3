@@ -23,5 +23,6 @@ public class DotEnvConfig {
 
         System.setProperty("jwt.secret", Objects.requireNonNull(dotenv.get("JWT_SECRET")));
 
+        System.setProperty("jwt.secret.key", dotenv.get("JWT_SECRET"));
     }
 }

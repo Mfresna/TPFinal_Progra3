@@ -16,7 +16,7 @@ class EmailSenderTest {
 
     @Test
     void enviarMailTest() {
-        //enviarmail.mailResetPass("afuentes0491@gmail.com","ESTE ES UN TOKEN");
+        enviarmail.mailResetPass("afuentes0491@gmail.com","ESTE ES UN TOKEN");
         System.out.println("HOLA");
     }
 

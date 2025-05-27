@@ -1,11 +1,9 @@
 package TpFinal_Progra3.repositoryTesters;
 
-import TpFinal_Progra3.config.DotEnvConfig;
-import TpFinal_Progra3.entities.Obra;
-import TpFinal_Progra3.enums.CategoriaObra;
-import TpFinal_Progra3.enums.EstadoObra;
+import TpFinal_Progra3.model.entities.Obra;
+import TpFinal_Progra3.model.enums.CategoriaObra;
+import TpFinal_Progra3.model.enums.EstadoObra;
 import TpFinal_Progra3.repositories.ObraRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ObraRepositoryTest {
-
-    @BeforeAll
-    static void setup() {
-        DotEnvConfig.load(); // Cargar variables de entorno antes de los test
-    }
 
     @Autowired
     private ObraRepository obraRepository;

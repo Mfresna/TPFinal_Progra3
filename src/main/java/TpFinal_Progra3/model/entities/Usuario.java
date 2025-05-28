@@ -1,9 +1,8 @@
 package TpFinal_Progra3.model.entities;
 
-import TpFinal_Progra3.security.model.enums.RolUsuario;
+import TpFinal_Progra3.security.model.entities.Credencial;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,10 +23,11 @@ public class Usuario {
     //@Size(max = 100)
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RolUsuario rol;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "credencial_id", referencedColumnName = "id", nullable = false, unique = true)
+    private Credencial credencial;
 
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -39,7 +39,7 @@ public class Usuario {
     //@NotBlank(message = "El nombre no puede estar vacio")
     private String nombre;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 35)
     //@NotBlank(message = "El apellido no puede estar vacio")
     private String apellido;
 

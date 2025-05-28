@@ -31,9 +31,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Buscar usuarios inactivos
     List<Usuario> findByIsActivoFalse();
 
-    // Obtener todos los usuarios con un rol específico
-    List<Usuario> findByRol(RolUsuario rol);
-
     // Buscar usuarios que pertenezcan a un estudio específico
     @Query("SELECT u FROM Usuario u JOIN u.estudios e WHERE e.id = :estudioId")
     List<Usuario> findByEstudioId(@Param("estudioId") Long estudioId);

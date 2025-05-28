@@ -32,8 +32,7 @@ public class Credencial implements UserDetails{
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "usuario_id", unique = true)
+    @OneToOne(mappedBy = "credencial",fetch = FetchType.LAZY)
     private Usuario usuario;
 
     //Con las credenciales trae el rol del usuario, este rol lo trae inmediatamente cuando se carga el usr por eso el EAGER

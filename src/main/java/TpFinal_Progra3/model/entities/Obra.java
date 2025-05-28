@@ -35,6 +35,7 @@ public class Obra {
     @Column(nullable = false)
     private EstadoObra estado;
 
+
     private Integer anioEstado;
 
     @Enumerated(EnumType.STRING)
@@ -49,13 +50,13 @@ public class Obra {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "imagenes_obra",
-            joinColumns = @JoinColumn(name = "imagen_id"),
-            inverseJoinColumns = @JoinColumn(name = "obra_id")
+            joinColumns = @JoinColumn(name = "imagen_id",nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "obra_id",nullable = false)
     )
     private List<Imagen> imagenes;
 
     @ManyToOne
-    @JoinColumn(name = "estudioarq_id") // Clave foránea en la tabla Obra
+    @JoinColumn(name = "estudioarq_id",nullable = false) // Clave foránea en la tabla Obra
     //@NotNull(message = "El estudio asociado no puede ser nulo.")
     private EstudioArquitectura estudio;
 }

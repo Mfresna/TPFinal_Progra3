@@ -28,8 +28,8 @@ public class Favorito {
     @ManyToMany
     @JoinTable(
             name = "obras_favorito",
-            joinColumns = @JoinColumn(name = "favorito_id"),
-            inverseJoinColumns = @JoinColumn(name = "obra_id")
+            joinColumns = @JoinColumn(name = "favorito_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "obra_id", nullable = false)
     )
     private List<Obra> obras;
 

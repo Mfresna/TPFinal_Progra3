@@ -16,12 +16,13 @@ public class Notificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //NO SE USA RELACIONES JPA PARA NO SOBRECARGAR EL OBJETO NOTIFICACION
-    @Column(nullable = false)
-    private Long idEmisor; //PK de usuario Emisor
+    @ManyToOne
+    @JoinColumn(name = "emisor_id", nullable = false)
+    private Usuario emisor;
 
-    @Column(nullable = false)
-    private Long idReceptor; //PK de usuario Receptor
+    @ManyToOne
+    @JoinColumn(name = "receptor_id", nullable = false)
+    private Usuario recepto;
 
     private String mensaje;
     private LocalDateTime fecha;

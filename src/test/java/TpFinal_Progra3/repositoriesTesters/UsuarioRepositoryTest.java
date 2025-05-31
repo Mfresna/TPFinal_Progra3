@@ -1,4 +1,4 @@
-package TpFinal_Progra3.repositoryTesters;
+package TpFinal_Progra3.repositoriesTesters;
 
 import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.security.model.entities.Credencial;

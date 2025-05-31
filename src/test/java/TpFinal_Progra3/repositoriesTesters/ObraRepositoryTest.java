@@ -1,4 +1,4 @@
-package TpFinal_Progra3.repositoryTesters;
+package TpFinal_Progra3.repositoriesTesters;
 
 import TpFinal_Progra3.model.entities.Obra;
 import TpFinal_Progra3.model.enums.CategoriaObra;

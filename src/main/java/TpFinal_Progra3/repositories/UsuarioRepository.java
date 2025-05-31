@@ -1,37 +1,35 @@
 package TpFinal_Progra3.repositories;
 
+import TpFinal_Progra3.model.entities.EstudioArquitectura;
 import TpFinal_Progra3.model.entities.Usuario;
-import TpFinal_Progra3.security.model.enums.RolUsuario;
+import TpFinal_Progra3.model.DTO.projections.UsuarioBasicoProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    // Buscar usuario por ID
-    Optional<Usuario> findById(Long id);
-
-    // Buscar usuario por correo electrónico
+    // Buscar por email directo en la entidad Usuario
     Optional<Usuario> findByEmail(String email);
 
-    // Buscar usuarios por nombre
-    List<Usuario> findByNombreContainingIgnoreCase(String nombre);
-
-    // Buscar usuarios por apellido
-    List<Usuario> findByApellidoContainingIgnoreCase(String apellido);
-
-    // Buscar usuarios activos
+    // Buscar por estado activo
     List<Usuario> findByIsActivoTrue();
-
-    // Buscar usuarios inactivos
     List<Usuario> findByIsActivoFalse();
 
-    // Buscar usuarios que pertenezcan a un estudio específico
-    @Query("SELECT u FROM Usuario u JOIN u.estudios e WHERE e.id = :estudioId")
-    List<Usuario> findByEstudioId(@Param("estudioId") Long estudioId);
+    // Buscar por nombre o apellido
+    List<Usuario> findByNombre(String nombre);
+    List<Usuario> findByApellido(String apellido);
+
+    // Ver si existe un usuario por email
+    boolean existsByEmail(String email);
+
+    // Buscar usuarios que pertenezcan a un estudio
+    List<Usuario> findByEstudiosContaining(EstudioArquitectura estudio);
+
+    // Buscar usuarios por ID de estudio (si usás proyección)
+    List<UsuarioBasicoProjection> findByEstudiosId(Long estudioId);
+
+    // Buscar proyección básica de usuario por email
+    Optional<UsuarioBasicoProjection> findProjectedByEmail(String email);
 }

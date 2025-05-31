@@ -1,15 +1,15 @@
-/*package TpFinal_Progra3.repositories;
+package TpFinal_Progra3.repositories;
 
-import TpFinal_Progra3.entities.Imagen;
+import TpFinal_Progra3.model.entities.Imagen;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface ImagenRepository extends JpaRepository<Imagen, Long> {
 
-    // Buscar imagen por nombre
-    Optional<Imagen> findByNombre(String nombre);
-
-    // Buscar imagen por URL (única en la BD)
     Optional<Imagen> findByUrl(String url);
-}*/
+
+    boolean existsByUrl(String url);
+}

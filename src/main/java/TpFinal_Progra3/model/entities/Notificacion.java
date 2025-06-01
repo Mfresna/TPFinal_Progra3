@@ -22,11 +22,12 @@ public class Notificacion {
 
     @ManyToOne
     @JoinColumn(name = "receptor_id", nullable = false)
-    private Usuario recepto;
+    private Usuario receptor;
 
     private String mensaje;
     private LocalDateTime fecha;
 
+    @Builder.Default //Hace que leido se defina false si no se especifica en builder
     @Column(nullable = false)
     private Boolean isLeido = false;
 }

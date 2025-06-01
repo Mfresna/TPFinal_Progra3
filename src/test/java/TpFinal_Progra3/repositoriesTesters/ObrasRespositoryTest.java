@@ -1,18 +1,15 @@
 package TpFinal_Progra3.repositoriesTesters;
 
-import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Obra;
 import TpFinal_Progra3.model.enums.CategoriaObra;
 import TpFinal_Progra3.model.enums.EstadoObra;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
-import TpFinal_Progra3.security.model.entities.Credencial;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class ObrasRespositoryTest {

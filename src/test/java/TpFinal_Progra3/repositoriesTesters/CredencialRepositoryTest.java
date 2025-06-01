@@ -1,6 +1,5 @@
 package TpFinal_Progra3.repositoriesTesters;
 
-import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.security.model.entities.Credencial;
 import TpFinal_Progra3.security.model.entities.Rol;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 

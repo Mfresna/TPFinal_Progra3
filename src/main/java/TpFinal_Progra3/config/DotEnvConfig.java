@@ -8,7 +8,7 @@ import java.util.Objects;
 @Configuration
 public class DotEnvConfig {
 
-    //Como es un bloque static en una clase Configuration se ejecute antes que todo
+    //Como es un bloque static en una clase Configuration se ejecute antes que el resto
     static {
 
         Dotenv dotenv = Dotenv.load();

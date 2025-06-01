@@ -38,7 +38,7 @@ public class Credencial implements UserDetails{
     //Con las credenciales trae el rol del usuario, este rol lo trae inmediatamente cuando se carga el usr por eso el EAGER
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(
-            name = "credentials_roles",
+            name = "roles_credencial",
             joinColumns = @JoinColumn(name = "credential_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

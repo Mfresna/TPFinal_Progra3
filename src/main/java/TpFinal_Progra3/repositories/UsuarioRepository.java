@@ -1,8 +1,7 @@
 package TpFinal_Progra3.repositories;
 
-import TpFinal_Progra3.model.entities.EstudioArquitectura;
+import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Usuario;
-import TpFinal_Progra3.model.DTO.projections.UsuarioBasicoProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +26,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByEmailIgnoreCase(String email);
 
     // Buscar usuarios que pertenezcan a un estudio
-    List<Usuario> findByEstudiosContaining(EstudioArquitectura estudio);
+    List<Usuario> findByEstudiosContaining(EstudioArq estudio);
 
 //    // Buscar usuarios por ID de estudio (si usás proyección)
 //    List<UsuarioBasicoProjection> findByEstudiosId(Long estudioId);

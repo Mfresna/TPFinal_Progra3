@@ -58,5 +58,5 @@ public class Obra {
     @ManyToOne
     @JoinColumn(name = "estudioarq_id",nullable = false) // Clave foránea en la tabla Obra
     //@NotNull(message = "El estudio asociado no puede ser nulo.")
-    private EstudioArquitectura estudio;
+    private EstudioArq estudio;
 }

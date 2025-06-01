@@ -57,7 +57,7 @@ public class Usuario {
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "estudio_id")
     )
-    private List<EstudioArquitectura> estudios; //Un usr puede pertenecer a muchos estudios y un estudio tener muchos usr
+    private List<EstudioArq> estudios; //Un usr puede pertenecer a muchos estudios y un estudio tener muchos usr
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "usuario_id")

@@ -13,18 +13,18 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // Buscar por email directo en la entidad Usuario
-    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByEmailIgnoreCase(String email);
 
     // Buscar por estado activo
     List<Usuario> findByIsActivoTrue();
     List<Usuario> findByIsActivoFalse();
 
     // Buscar por nombre o apellido
-    List<Usuario> findByNombre(String nombre);
-    List<Usuario> findByApellido(String apellido);
+    List<Usuario> findByNombreIgnoreCase(String nombre);
+    List<Usuario> findByApellidoIgnoreCase(String apellido);
 
     // Ver si existe un usuario por email
-    boolean existsByEmail(String email);
+    boolean existsByEmailIgnoreCase(String email);
 
     // Buscar usuarios que pertenezcan a un estudio
     List<Usuario> findByEstudiosContaining(EstudioArquitectura estudio);

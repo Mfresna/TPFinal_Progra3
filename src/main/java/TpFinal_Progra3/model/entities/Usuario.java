@@ -31,7 +31,7 @@ public class Usuario {
     private String descripcion;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "imagen_id") // FK en la tabla Usuario
+    @JoinColumn(name = "imagen_id")
     private Imagen imagen;
 
     @Column(nullable = false, length = 20)
@@ -47,6 +47,7 @@ public class Usuario {
     //@Past(message = "La fecha de nacimiento debe ser anterior a hoy")
     private LocalDate fechaNacimiento;
 
+    @Builder.Default //Hace que activo se defina true si no se especifica en builder
     @Column(nullable = false)
     private Boolean isActivo = true;
 
@@ -61,4 +62,18 @@ public class Usuario {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "usuario_id")
     private List<Favorito> listaFavoritos;
+
+    //Tengo que sacar las credenciales pq al printearlo entra en bucle
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                ", isActivo=" + isActivo +
+                '}';
+    }
 }

@@ -1,6 +1,8 @@
 package TpFinal_Progra3.repositoriesTesters;
 
+import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.security.model.entities.Credencial;
+import TpFinal_Progra3.security.model.entities.Rol;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
 import TpFinal_Progra3.security.repositories.CredencialRepository;
 import TpFinal_Progra3.security.repositories.RolRepository;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,16 +26,21 @@ public class CredencialRepositoryTest {
     @Autowired
     private RolRepository rolRepository;
 
-    /**
-     * VERIFICAR QUE EXISTA UN ROL_USUARIO EN LA DB
-     */
+
     @Test
     void testGuardarCredencial() {
+        //Si no encuentra el Rol lo crea
+        Rol rol = rolRepository.findByRol(RolUsuario.ROL_USUARIO)
+                .orElseGet(() -> rolRepository.save(
+                        Rol.builder()
+                                .rol(RolUsuario.ROL_USUARIO)
+                                .build()
+                ));
 
         Credencial credencial = Credencial.builder()
                 .email("test@gmail.com")
                 .password("test")
-                .roles(Set.of(rolRepository.findByRol(RolUsuario.ROL_USUARIO).get()))
+                .roles(Set.of(rol))
                 .build();
 
         credencialRepository.save(credencial);

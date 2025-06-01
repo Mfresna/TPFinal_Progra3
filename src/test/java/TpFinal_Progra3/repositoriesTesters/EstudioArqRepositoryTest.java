@@ -29,10 +29,8 @@ public class EstudioArqRepositoryTest {
     @Test
     void testBuscarNombre(){
         //No puedo imprimir el objeto completo pq si no tiene obras o arquitectos se rompe el print
-        List<EstudioArq> estudioArq = estudioArqRepository.findByNombreIgnoreCase("Estudio Test");
-        for(EstudioArq e : estudioArq){
-            System.out.println(e.getNombre());
-        }
+        Optional<EstudioArq> estudioArq = estudioArqRepository.findByNombreIgnoreCase("Estudio Test");
+        System.out.println(estudioArq.get().getNombre());
     }
 
     @Test

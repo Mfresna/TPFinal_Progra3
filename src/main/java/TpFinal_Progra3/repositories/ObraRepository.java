@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ObraRepository extends JpaRepository<Obra, Long> {
@@ -18,4 +19,9 @@ public interface ObraRepository extends JpaRepository<Obra, Long> {
     List<Obra> findByEstudioId(Long estudioId);
 
     List<Obra> findByNombreContainingIgnoreCase(String nombre);
+
+    List<Obra> findByNombreIgnoreCase(String nombre);
+
+    List<Obra> findByNombreContainingIgnoreCaseAndEstudioId(String nombre, Long estudioId);
+
 }

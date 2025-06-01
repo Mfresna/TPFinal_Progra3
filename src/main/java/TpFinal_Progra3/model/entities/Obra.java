@@ -35,7 +35,6 @@ public class Obra {
     @Column(nullable = false)
     private EstadoObra estado;
 
-
     private Integer anioEstado;
 
     @Enumerated(EnumType.STRING)

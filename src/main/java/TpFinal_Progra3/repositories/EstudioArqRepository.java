@@ -11,8 +11,7 @@ import java.util.List;
 @Repository
 public interface EstudioArqRepository extends JpaRepository<EstudioArq, Long> {
 
-    //Es una lista pq el campo nombre no es unique entonces puede ser que recibamos dos objetos
-    List<EstudioArq> findByNombreIgnoreCase(String nombre);
+    Optional<EstudioArq> findByNombreIgnoreCase(String nombre);
 
     List<EstudioArq> findByNombreContainingIgnoreCase(String nombre);
 

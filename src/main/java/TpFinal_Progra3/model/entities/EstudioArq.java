@@ -16,7 +16,7 @@ public class EstudioArq {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     //@NotBlank(message = "El nombre del estudio no puede estar vacio.")
     private String nombre;
 

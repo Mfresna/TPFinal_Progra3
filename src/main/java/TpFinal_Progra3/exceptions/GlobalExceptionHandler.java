@@ -16,4 +16,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e.getMessage());
     }
 
+    @ExceptionHandler(CoordenadaException.class)
+    public ResponseEntity<String> handlerCoordenadasinvalidas(CoordenadaException e) {
+        if(e.getStatus() != null){
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
 }

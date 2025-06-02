@@ -1,20 +1,14 @@
 package TpFinal_Progra3.Utils;
 
-import TpFinal_Progra3.exceptions.CordenadaException;
+import TpFinal_Progra3.exceptions.CoordenadaException;
 
-public class CordenadasUtils {
+public class CoordenadasUtils {
 
-    /**
-     *
-     * @param cordenadaDms -> "57°33'10.0W"
-     * @return -> Double (-57.5527777.)
-     * @throws CordenadaException
-     */
-    public static double dmsToDouble(String cordenadaDms) throws CordenadaException {
+    public static double dmsToDouble(String cordenadaDms) throws CoordenadaException {
 
         //Verifico que la Cordenada no sea Null o Vacia
         if (cordenadaDms == null || cordenadaDms.trim().isEmpty()) {
-            throw new CordenadaException("La coordenada no puede ser nula o vacía.");
+            throw new CoordenadaException("La coordenada no puede ser nula o vacía.");
         }
 
         // Valida que el final de la coordenada sea valido
@@ -25,7 +19,7 @@ public class CordenadasUtils {
         String[] partes = coordenada.split("[°'\"]");
 
         if (partes.length != 3) {
-            throw new CordenadaException("Formato incorrecto. Se esperaban grados, minutos y segundos.");
+            throw new CoordenadaException("Formato incorrecto. Se esperaban grados, minutos y segundos.");
         }
 
         try {
@@ -35,15 +29,15 @@ public class CordenadasUtils {
 
             // Validar rangos
             if (grados < 0 || minutos < 0 || minutos >= 60 || segundos < 0 || segundos >= 60) {
-                throw new CordenadaException("Valores fuera de rango: grados >= 0, minutos y segundos entre 0 y 59.");
+                throw new CoordenadaException("Valores fuera de rango: grados >= 0, minutos y segundos entre 0 y 59.");
             }
 
             // Valida si la Latitud o la Longitud son Validas
             if ((cardinal == 'N' || cardinal == 'S') && grados > 90) {
-                throw new CordenadaException("Latitud inválida: grados deben ser entre 0 y 90.");
+                throw new CoordenadaException("Latitud inválida: grados deben ser entre 0 y 90.");
             }
             if ((cardinal == 'E' || cardinal == 'W') && grados > 180) {
-                throw new CordenadaException("Longitud inválida: grados deben ser entre 0 y 180.");
+                throw new CoordenadaException("Longitud inválida: grados deben ser entre 0 y 180.");
             }
 
             // CONVERSION A DOUBLE
@@ -56,18 +50,11 @@ public class CordenadasUtils {
             return coordenadaDouble;
 
         } catch (NumberFormatException e) {
-            throw new CordenadaException("No se pudo convertir grados, minutos o segundos a número.");
+            throw new CoordenadaException("No se pudo convertir grados, minutos o segundos a número.");
         }
     }
 
-    /**
-     *
-     * @param cordenadaDouble
-     * @param isLat
-     * @return -> ("57°33'10.0"W")
-     * @throws CordenadaException
-     */
-    public static String doubleToDMS(double cordenadaDouble, boolean isLat) throws CordenadaException {
+    public static String doubleToDMS(double cordenadaDouble, boolean isLat) throws CoordenadaException {
         // Validar cardinal
         char cardinal;
         if(isLat && (cordenadaDouble>-90 || cordenadaDouble<90)){
@@ -89,7 +76,7 @@ public class CordenadasUtils {
                 cardinal = 'W';
             }
         }else{
-            throw new CordenadaException("Cordenada invalida segun latitud y longitud");
+            throw new CoordenadaException("Cordenada invalida segun latitud y longitud");
         }
 
 
@@ -104,12 +91,31 @@ public class CordenadasUtils {
         return String.format("%d°%02d'%04.1f\"%s", grados, minutos, segundos, cardinal);
     }
 
-
     /**
-     * @param coordenadaDMS
-     * @return Cardinal Valido (NSEW)
-     * @exception CordenadaException
+     *
+     * @param lat
+     * @param lon
+     * @return
+     *   0 - OK
+     *  -1 - ERROR LATITUD
+     *  -2 - ERROR LONGITUD
+     *  -3 - ERROR AMBOS
      */
+    public static int validarCoordenadas(double lat, double lon){
+        int retorno = 0; //Asumo que es correcta
+
+        if(lat <= -90 || lat >= 90){
+            //Latitud fuera de rango
+            retorno -= 1;
+        }
+        if(lon <= -180 || lon >= 180){
+            //Longitud fuera de rango
+            retorno -= 2;
+        }
+
+        return retorno;
+    }
+
     private static char contieneCardinal(String coordenadaDMS){
         if(coordenadaDMS.toUpperCase().contains("N") || coordenadaDMS.toUpperCase().contains("E")
         || coordenadaDMS.toUpperCase().contains("S") || coordenadaDMS.toUpperCase().contains("W")) {
@@ -117,9 +123,10 @@ public class CordenadasUtils {
             return coordenadaDMS.charAt(coordenadaDMS.length() - 1);
         }else {
             //No contiene Letra es un error
-            throw new CordenadaException("La Cordenada no contiene Cardinalidad (NSEW)");
+            throw new CoordenadaException("La Cordenada no contiene Cardinalidad (NSEW)");
         }
 
     }
+
 
 }

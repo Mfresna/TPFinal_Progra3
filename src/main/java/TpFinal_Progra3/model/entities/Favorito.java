@@ -23,6 +23,7 @@ public class Favorito {
 
     //@NotBlank(message = "El nombre de la lista no puede estar vacio")
     //@Size(max = 100)
+    @Column(nullable = false)
     private String nombreLista;
 
     @ManyToMany
@@ -33,5 +34,7 @@ public class Favorito {
     )
     private List<Obra> obras;
 
-    private LocalDateTime fechaCreacion;
+    @Builder.Default //Hace que la fecha si no se la defino sea la actual en el builder
+    @Column(nullable = false)
+    private LocalDateTime fechaCreacion = LocalDateTime.now();
 }

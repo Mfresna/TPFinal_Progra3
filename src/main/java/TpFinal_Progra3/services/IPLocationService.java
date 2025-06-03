@@ -1,7 +1,9 @@
 package TpFinal_Progra3.services;
 
+import TpFinal_Progra3.exceptions.IPLocationException;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -30,26 +32,29 @@ public class IPLocationService {
     }
 
     //Devuelve un DTO con la ubicacion del cliente
-    public Mono<IPLocationDTO> obtenerUbicacion(String ip) {
-            return webClient.get().uri(uriBuilder -> uriBuilder
+    public Optional<IPLocationDTO> obtenerUbicacion(String ip){
+
+            return Optional.ofNullable(webClient.get().uri(uriBuilder -> uriBuilder
                             .path("/" + ip)
                             .queryParam("access_key", apiKey)
                             .build())
                     .retrieve()
                     .bodyToMono(Map.class)
-                    .map(json ->{
-                        System.out.println(json);
-                        return IPLocationDTO.builder()
-                                .ip(ip)
-                                //.latitud((Double) json.get("latitude"))
-                                //.longitud((Double) json.get("longitude"))
-                                .build();
-                    });
-            //Si se lanza un error devuelve un optional vacio
-
+                    .map(json -> mapearAUbicacion(ip,json))
+                    .block());
     }
 
-    private IPLocationDTO mapearAUbicacion(String ip, Map<String, Object> json) {
+    private IPLocationDTO mapearAUbicacion(String ip, @NotNull Map<String, Object> json) throws IPLocationException{
+        if(Boolean.FALSE.equals(json.get("success"))){
+            //Hubo error
+            if(json.containsKey("error")){
+                throw new IPLocationException(json.get("error").toString());
+            }else{
+                throw new IPLocationException("Ocurrio un error en la recepcion del JSON-IPLocation.");
+            }
+        }
+
+        //Si no tiene error devuelve el DTO Cargado
         return IPLocationDTO.builder()
                 .ip(ip)
                 .latitud(extraerDouble(json.get("latitude")))

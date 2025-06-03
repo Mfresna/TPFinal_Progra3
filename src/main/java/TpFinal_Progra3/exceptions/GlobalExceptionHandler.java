@@ -24,4 +24,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
+    @ExceptionHandler(IPLocationException.class)
+    public ResponseEntity<String> handlerIPLocation(IPLocationException e) {
+        if(e.getStatus() != null){
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
 }

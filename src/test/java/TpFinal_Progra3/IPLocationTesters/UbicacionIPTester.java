@@ -14,8 +14,9 @@ public class UbicacionIPTester {
 
     @Test
     void testMiUbicacion(){
-        IPLocationDTO dto = IPLocationService.obtenerUbicacion("190.188.89.16").block();
-        System.out.println(dto);
+            IPLocationDTO dto = IPLocationService.obtenerUbicacion("190.188.89.16").get();
+            System.out.println(dto);
+
     }
 
 }

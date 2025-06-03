@@ -24,4 +24,7 @@ public interface ObraRepository extends JpaRepository<Obra, Long> {
 
     List<Obra> findByNombreContainingIgnoreCaseAndEstudioId(String nombre, Long estudioId);
 
+    //Devuelve las obras segun un rango de coordenadas
+    List<Obra> findByLatitudBetweenAndLongitudBetween(Double latMin, Double latMax, Double lonMin, Double lonMax);
+
 }

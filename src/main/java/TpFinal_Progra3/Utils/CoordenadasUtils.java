@@ -1,6 +1,11 @@
 package TpFinal_Progra3.Utils;
 
 import TpFinal_Progra3.exceptions.CoordenadaException;
+import TpFinal_Progra3.model.DTO.IPLocationDTO;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class CoordenadasUtils {
 
@@ -91,16 +96,7 @@ public class CoordenadasUtils {
         return String.format("%d°%02d'%04.1f\"%s", grados, minutos, segundos, cardinal);
     }
 
-    /**
-     *
-     * @param lat
-     * @param lon
-     * @return
-     *   0 - OK
-     *  -1 - ERROR LATITUD
-     *  -2 - ERROR LONGITUD
-     *  -3 - ERROR AMBOS
-     */
+    // 0 - OK || -1 - ERROR LATITUD || -2 - ERROR LONGITUD || -3 - ERROR AMBOS
     public static int validarCoordenadas(double lat, double lon){
         int retorno = 0; //Asumo que es correcta
 
@@ -126,6 +122,32 @@ public class CoordenadasUtils {
             throw new CoordenadaException("La Cordenada no contiene Cardinalidad (NSEW)");
         }
 
+    }
+
+    //Obtiene las coordenadas para buscar por distancia
+    public static Map<String,Double> areaDeBusqueda(IPLocationDTO ubicacionUsuario, Double distanciaKm) {
+        //Formula de Haversine
+        switch (validarCoordenadas(ubicacionUsuario.getLatitud(),ubicacionUsuario.getLongitud())){
+            case -1 -> throw new CoordenadaException("Error en la latitud del usuario");
+            case -2 -> throw new CoordenadaException("Error en la longitud del usuario");
+            case -3 -> throw new CoordenadaException("Error en las coordenadas del usuario");
+        }
+            //Si las coordenadas están bien continuo
+        final Double EARTH_RADIUS_KM = 6371.0;  //Diametro de la Tierra en KM
+
+        //La latitud del cliente se convierte a un double de radianes
+        double latRad = Math.toRadians(ubicacionUsuario.getLatitud());
+
+        double deltaLat = Math.toDegrees(distanciaKm / EARTH_RADIUS_KM);
+        double deltaLon = Math.toDegrees(distanciaKm / EARTH_RADIUS_KM / Math.cos(latRad));
+
+        Map<String, Double> areaBusqueda = new HashMap<>();
+        areaBusqueda.put("latMin", (ubicacionUsuario.getLatitud() - deltaLat));
+        areaBusqueda.put("latMax", (ubicacionUsuario.getLatitud() + deltaLat));
+        areaBusqueda.put("lonMin", (ubicacionUsuario.getLongitud() - deltaLon));
+        areaBusqueda.put("lonMax", (ubicacionUsuario.getLongitud() + deltaLon));
+
+        return areaBusqueda;
     }
 
 

@@ -15,4 +15,5 @@ public class OpenStreetMapServiceTest {
     void testPedirURL(){
         System.out.println(osmService.generarMapaConMarcador(-34.603700,-58.381600, 15));
     }
+
 }

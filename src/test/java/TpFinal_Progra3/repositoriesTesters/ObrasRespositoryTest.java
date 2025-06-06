@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class ObrasRespositoryTest {
@@ -95,6 +96,12 @@ public class ObrasRespositoryTest {
         for(Obra o : obras){
             System.out.println(o.getNombre());
         }
+    }
+
+    @Test
+    void testObrasPorArea(){
+
+        //List<Obra> obras = obraRepository.findByLatitudBetweenAndLongitudBetween()
     }
 
 }

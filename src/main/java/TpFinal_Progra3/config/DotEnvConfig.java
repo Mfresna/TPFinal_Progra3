@@ -18,11 +18,14 @@ public class DotEnvConfig {
         System.setProperty("spring.datasource.username", Objects.requireNonNull(dotenv.get("DB_USERNAME")));
         System.setProperty("spring.datasource.password", Objects.requireNonNull(dotenv.get("DB_PASSWORD")));
 
+        //SMTP-Google
         System.setProperty("spring.mail.username", Objects.requireNonNull(dotenv.get("EMAIL")));
         System.setProperty("spring.mail.password", Objects.requireNonNull(dotenv.get("EMAIL_PASSWORD")));
 
+        //JWT
         System.setProperty("jwt.secret", Objects.requireNonNull(dotenv.get("JWT_SECRET")));
 
-        System.setProperty("jwt.secret.key", dotenv.get("JWT_SECRET"));
+        //UbicacionIP
+        System.setProperty("ip.location.api.key", Objects.requireNonNull(dotenv.get("IP_LOCATION_KEY")));
     }
 }

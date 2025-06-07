@@ -44,9 +44,10 @@ public class SecurityConfig {
         // Configura las reglas de autorización para las solicitudes HTTP.
         http.authorizeHttpRequests(auth -> auth
                         //autenticacion sin restriccion
-                        .requestMatchers("/auth/**").permitAll()
+                        //.requestMatchers("/auth/**").permitAll()
                         // Otros EndPoints deben estar autenticados
-                        .anyRequest().authenticated())
+                        //.anyRequest().authenticated())
+                        .anyRequest().permitAll())
 
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

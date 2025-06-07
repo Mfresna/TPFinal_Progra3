@@ -1,6 +1,5 @@
 package TpFinal_Progra3.emailSenderTesters;
 
-import TpFinal_Progra3.model.DTO.UsuarioBasicoDTO;
 import TpFinal_Progra3.security.services.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

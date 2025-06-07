@@ -19,8 +19,8 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> registrarUsuario(@RequestBody UsuarioDTO dto) {
-        Usuario nuevoUsuario = usuarioService.registrarUsuario(dto);
+    public ResponseEntity<UsuarioDTO> registrarUsuario(@RequestBody UsuarioDTO dto) {
+        UsuarioDTO nuevoUsuario = usuarioService.registrarUsuario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
     }
 }

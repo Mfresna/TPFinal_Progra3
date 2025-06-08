@@ -43,7 +43,7 @@ public class UsuarioRepositoryTest {
                 ));
 
         Credencial credencial = Credencial.builder()
-                .email("test@gmail.com")
+                .email("test1@gmail.com")
                 .password("test")
                 .roles(Set.of(rol))
                 .build();

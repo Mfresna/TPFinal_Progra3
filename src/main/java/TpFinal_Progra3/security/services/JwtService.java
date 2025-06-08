@@ -1,7 +1,5 @@
 package TpFinal_Progra3.security.services;
 
-import TpFinal_Progra3.model.DTO.UsuarioBasicoDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,30 +25,24 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private Long jwtVencimiento;
 
-    //Genera el token con el id y el mail, hace uso de <constructorToken>.
-    public String generarToken(UsuarioBasicoDTO usuario) {
+    @Value("${jwt.expiration.email}")
+    private Long jwtVencimientoTokenEmail;
 
-        //convierte el DTO en un MAP
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> dtoMap = objectMapper.convertValue(usuario, Map.class);
-
-        return constructorToken(dtoMap,usuario.getId().toString(), jwtVencimiento);
-    }
-
-    //Construye un token
-    private String constructorToken(Map<String, Object> atributos, String identificador, long expiration){
-        return Jwts
-                .builder()
-                .setClaims(atributos)
-                .setSubject(identificador)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
+    //Extrae el claim del username o el ID segun como generé el Token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    //Genera el token con los roles,  hace uso de BuildToken.
+    public String generarToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", userDetails.getAuthorities());
+        return buildToken(claims, userDetails, jwtVencimiento);
+    }
+
+    //Genera un Token solo con el ID del usuario para que cambie la contraseña por mail
+    public String generarToken(Long userId) {
+        return TokenID(userId, jwtVencimientoTokenEmail);
     }
 
     //Extrae una claim especifica
@@ -69,10 +61,46 @@ public class JwtService {
                 .getBody();
     }
 
+    //Valida que un token sea valido, comparando que el username sea el mismo y que no este expirado.
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()))
+                && !isTokenExpired(token)
+                && userDetails.isAccountNonLocked()
+                && userDetails.isEnabled();
+    }
+
+    //Construye un token
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration){
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    //Construye un token solo con el ID (sirve para recuperar Pass)
+    private String TokenID(Long userId, long vencimiento) {
+        return Jwts.builder()
+                .setSubject(String.valueOf(userId))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + vencimiento))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     //Obtiene la KEY para firmar el token.
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    //Valida que el token no este expirado.
+    private boolean isTokenExpired(String token) {
+        Date expiration = extractClaim(token, Claims::getExpiration);
+        return expiration.before(new Date());
     }
 
 }

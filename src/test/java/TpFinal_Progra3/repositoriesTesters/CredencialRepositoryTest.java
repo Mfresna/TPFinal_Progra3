@@ -24,7 +24,6 @@ public class CredencialRepositoryTest {
     @Autowired
     private RolRepository rolRepository;
 
-
     @Test
     void testGuardarCredencial() {
         //Si no encuentra el Rol lo crea

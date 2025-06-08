@@ -1,0 +1,47 @@
+package TpFinal_Progra3.controllers;
+
+import TpFinal_Progra3.exceptions.NotFoundException;
+import TpFinal_Progra3.model.DTO.ObraDTO;
+import TpFinal_Progra3.model.entities.EstudioArq;
+import TpFinal_Progra3.model.entities.Obra;
+import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
+import TpFinal_Progra3.repositories.EstudioArqRepository;
+import TpFinal_Progra3.services.implementacion.ObraService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/obras")
+@RequiredArgsConstructor
+public class ObraController {
+
+    private final ObraService obraService;
+    private final EstudioArqRepository estudioArqRepository;
+    private final ObraMapper obraMapper;
+
+    @PostMapping
+    public ResponseEntity<ObraDTO> crearObra(@RequestBody @Valid ObraDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(obraService.crearObra(dto));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ObraDTO> obtenerObra(@PathVariable Long id) {
+        return ResponseEntity.ok(obraService.obtenerObra(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ObraDTO>> listarObras() {
+        return ResponseEntity.ok(obraService.listarObras());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarObra(@PathVariable Long id) {
+        obraService.eliminarObra(id);
+        return ResponseEntity.ok("Obra eliminada correctamente.");
+    }
+}

@@ -21,7 +21,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mensajePersonalizado, true);
 
             //Armar url con el token
-            String urlReset = "www.google.com";
+            String urlReset = "localhost:8080/usr/rest-pass/" + token;
 
             String cuerpoHtml = "<html>" +
                     "<body style='font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px;'>" +

@@ -9,30 +9,30 @@ import org.springframework.stereotype.Component;
 public class ObraMapper {
 
     // Convertir de DTO a entidad
-    public Obra crearObra(ObraDTO dto, EstudioArq estudio) {
+    public Obra mapObra(ObraDTO obraDto, EstudioArq estudio) {
         return Obra.builder()
-                .nombre(dto.getNombre())
-                .latitud(dto.getLatitud())
-                .longitud(dto.getLongitud())
-                .descripcion(dto.getDescripcion())
-                .anioEstado(dto.getAnioEstado())
-                .estado(dto.getEstado())
-                .categoria(dto.getCategoria())
+                .nombre(obraDto.getNombre())
+                .latitud(obraDto.getLatitud())
+                .longitud(obraDto.getLongitud())
+                .descripcion(obraDto.getDescripcion())
+                .anioEstado(obraDto.getAnioEstado())
+                .estado(obraDto.getEstado())
+                .categoria(obraDto.getCategoria())
                 .estudio(estudio)
                 .build();
     }
 
     // Convertir de entidad a DTO (si lo necesitás para devolver en un GET)
-    public ObraDTO crearDTO(Obra obra) {
-        ObraDTO dto = new ObraDTO();
-        dto.setNombre(obra.getNombre());
-        dto.setLatitud(obra.getLatitud());
-        dto.setLongitud(obra.getLongitud());
-        dto.setDescripcion(obra.getDescripcion());
-        dto.setAnioEstado(obra.getAnioEstado());
-        dto.setEstado(obra.getEstado());
-        dto.setCategoria(obra.getCategoria());
-        dto.setEstudioId(obra.getEstudio().getId());
-        return dto;
+    public ObraDTO mapDTO(Obra obra) {
+        return ObraDTO.builder()
+                .nombre(obra.getNombre())
+                .latitud(obra.getLatitud())
+                .longitud(obra.getLongitud())
+                .descripcion(obra.getDescripcion())
+                .anioEstado(obra.getAnioEstado())
+                .estado(obra.getEstado())
+                .categoria(obra.getCategoria())
+                .estudioId(obra.getEstudio().getId())
+                .build();
     }
 }

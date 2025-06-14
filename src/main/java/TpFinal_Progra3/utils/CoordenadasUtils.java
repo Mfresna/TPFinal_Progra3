@@ -1,4 +1,4 @@
-package TpFinal_Progra3.Utils;
+package TpFinal_Progra3.utils;
 
 import TpFinal_Progra3.exceptions.CoordenadaException;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class CoordenadasUtils {
 

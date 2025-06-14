@@ -44,6 +44,7 @@ public class IPLocationService {
     }
 
     private IPLocationDTO mapearAUbicacion(String ip, @NotNull Map<String, Object> json) throws IPLocationException{
+        System.out.println(json);
         if(Boolean.FALSE.equals(json.get("success"))){
             //Hubo error
             if(json.containsKey("error")){

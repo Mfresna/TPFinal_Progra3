@@ -78,7 +78,7 @@ public class ObraController {
     }
 
     //Key: X-Forwarded-For
-    //Value: 8.8.8.8
+    //Value: mi ip publica
     @GetMapping("/cercanas")
     public ResponseEntity<List<ObraDTO>> obrasPorDistancia(HttpServletRequest request,
                                                            @RequestParam(required = false, defaultValue = "25") Double distanciaKm) {

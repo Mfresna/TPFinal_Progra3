@@ -1,6 +1,8 @@
 package TpFinal_Progra3.services.implementacion;
 
+import TpFinal_Progra3.exceptions.IPLocationException;
 import TpFinal_Progra3.exceptions.NotFoundException;
+import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import TpFinal_Progra3.model.DTO.ObraDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Obra;
@@ -9,13 +11,16 @@ import TpFinal_Progra3.model.enums.EstadoObra;
 import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
+import TpFinal_Progra3.services.IPLocationService;
 import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.interfaces.ObraServiceInterface;
 import TpFinal_Progra3.specifications.ObraSpecification;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
+import TpFinal_Progra3.utils.CoordenadasUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -35,9 +40,8 @@ public class ObraService implements ObraServiceInterface {
     private final EstudioArqRepository estudioArqRepository;
     private final ObraMapper obraMapper;
     private final OpenStreetMapService openStreetMapService;
+    private final IPLocationService ipLocationService;
 
-
-    @Override
     public ObraDTO crearObra(ObraDTO dto) {
         EstudioArq estudio = estudioArqRepository.findById(dto.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado"));
@@ -47,22 +51,12 @@ public class ObraService implements ObraServiceInterface {
         return obraMapper.mapDTO(obraGuardada);
     }
 
-    @Override
     public ObraDTO obtenerObra(Long id) {
         return obraRepository.findById(id)
                 .map(obraMapper::mapDTO)
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
     }
 
-    @Override
-    public List<ObraDTO> listarObras() {
-        return obraRepository.findAll()
-                .stream()
-                .map(obraMapper::mapDTO)
-                .toList();
-    }
-
-    @Override
     public void eliminarObra(Long id) throws NotFoundException {
         if (!obraRepository.existsById(id)) {
             throw new NotFoundException("Obra no encontrada.");
@@ -89,8 +83,6 @@ public class ObraService implements ObraServiceInterface {
                 .toList();
     }
 
-
-    // FILTRADO DE OBRAS
     public List<ObraDTO> filtrarObras(ObraFiltroDTO filtro) {
 
         // Verificar existencia del estudio
@@ -116,15 +108,12 @@ public class ObraService implements ObraServiceInterface {
     }
 
     public ObraDTO modificarObra(Long id, ObraDTO obraDTO) {
-        // 1. Buscar la obra existente
         Obra obra = obraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
 
-        // 2. Verificar si existe el estudio de arquitectura
         EstudioArq estudio = estudioArqRepository.findById(obraDTO.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio de arquitectura no encontrado con ID: " + obraDTO.getEstudioId()));
 
-        // 3. Actualizar campos de la obra
         obra.setNombre(obraDTO.getNombre());
         obra.setLatitud(obraDTO.getLatitud());
         obra.setLongitud(obraDTO.getLongitud());
@@ -134,9 +123,25 @@ public class ObraService implements ObraServiceInterface {
         obra.setCategoria(obraDTO.getCategoria());
         obra.setEstudio(estudio);
 
-        // 4. Guardar y devolver la obra actualizada
         Obra obraActualizada = obraRepository.save(obra);
         return obraMapper.mapDTO(obraActualizada);
+    }
+
+    public List<ObraDTO> obrasPorDistancia(HttpServletRequest request, Double distancia){
+        IPLocationDTO ipLocationUsuario =
+                ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
+                        .orElseThrow(() -> new IPLocationException(HttpStatus.CONFLICT,"No se puede obtener la Localizacion por IP"));
+        Map<String,Double> coordenadas = CoordenadasUtils.areaDeBusqueda(ipLocationUsuario, distancia);
+
+        return obraRepository.findByLatitudBetweenAndLongitudBetween(
+                coordenadas.get("latMin"),
+                coordenadas.get("latMax"),
+                coordenadas.get("lonMin"),
+                coordenadas.get("lonMax"))
+                .stream()
+                .map(obraMapper::mapDTO)
+                .toList();
+
     }
 
 }

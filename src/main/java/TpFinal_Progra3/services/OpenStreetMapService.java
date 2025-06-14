@@ -1,6 +1,6 @@
 package TpFinal_Progra3.services;
 
-import TpFinal_Progra3.Utils.CoordenadasUtils;
+import TpFinal_Progra3.utils.CoordenadasUtils;
 import TpFinal_Progra3.exceptions.CoordenadaException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -12,7 +12,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class OpenStreetMapService {

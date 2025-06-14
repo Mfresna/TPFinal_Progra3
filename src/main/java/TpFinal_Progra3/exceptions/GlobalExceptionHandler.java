@@ -1,16 +1,17 @@
 package TpFinal_Progra3.exceptions;
 
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,4 +45,57 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
+    // Manejo de excepciones para errores en el cuerpo de la solicitud
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
+        if (e.getCause() instanceof InvalidFormatException formatException) {
+            Class<?> targetType = formatException.getTargetType();
+            Object valorIngresado = formatException.getValue();
+
+            if (targetType.isEnum()) {
+                List<String> valoresPermitidos = Arrays.stream(targetType.getEnumConstants())
+                        .map(v -> ((Enum<?>) v).name())
+                        .toList();
+
+                return ResponseEntity.badRequest().body(Map.of(
+                        "error", "Valor inválido para campo tipo " + targetType.getSimpleName(),
+                        "valorRecibido", String.valueOf(valorIngresado),
+                        "valoresPermitidos", String.join(", ", valoresPermitidos)
+                ));
+            }
+        }
+
+        return ResponseEntity.badRequest().body(Map.of(
+                "error", "Error en el cuerpo de la solicitud",
+                "detalle", e.getMessage()
+        ));
+    }
+
+    // Manejo de excepciones para errores de conversión de enum pasados por url
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, String>> handleEnumConversionError(MethodArgumentTypeMismatchException ex) {
+        if (ex.getRequiredType() != null && ex.getRequiredType().isEnum()) {
+            //Obtiene el nombre de enum que se intenta cargar
+            String nombreEnum = ex.getRequiredType().getSimpleName();
+            //Valor que se intenta cargar en el DTO
+            String valorIngresado = String.valueOf(ex.getValue());
+
+            String valoresPermitidos = Arrays.stream(ex.getRequiredType().getEnumConstants())
+                    .map(e -> ((Enum<?>) e).name())
+                    .collect(Collectors.joining(", "));
+
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Valor inválido para parámetro tipo " + nombreEnum,
+                    "valorRecibido", valorIngresado,
+                    "valoresPermitidos", valoresPermitidos));
+        }
+
+        // Si no es un enum, se maneja como un error genérico de tipo de argumento
+        return ResponseEntity.badRequest().body(Map.of(
+                "error", "Parámetro inválido",
+                "detalle", ex.getMessage()));
+    }
 }
+
+
+

@@ -9,5 +9,6 @@ public interface ObraServiceInterface {
     ObraDTO crearObra(ObraDTO obra);
     ObraDTO obtenerObra(Long id);
     List<ObraDTO> listarObras();
-    boolean eliminarObra(Long id);
+    ObraDTO modificarObra(Long id, ObraDTO obraDTO);
+    void eliminarObra(Long id);
 }

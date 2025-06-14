@@ -2,8 +2,11 @@ package TpFinal_Progra3.controllers;
 
 import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.model.DTO.ObraDTO;
+import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Obra;
+import TpFinal_Progra3.model.enums.CategoriaObra;
+import TpFinal_Progra3.model.enums.EstadoObra;
 import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.services.implementacion.ObraService;
@@ -70,6 +73,32 @@ public class ObraController {
                                                             @RequestParam String pais){
         return ResponseEntity.ok(obraService.obrasPorTerritorio(ciudad,pais));
     }
+
+
+
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<ObraDTO>> filtrarObras(
+            @RequestParam(required = false) CategoriaObra categoria,
+            @RequestParam(required = false) EstadoObra estado,
+            @RequestParam(required = false) Long estudioId) {
+
+        ObraFiltroDTO filtro = new ObraFiltroDTO();
+        filtro.setCategoria(categoria);
+        filtro.setEstado(estado);
+        filtro.setEstudioId(estudioId);
+
+        return ResponseEntity.ok(obraService.filtrarObras(filtro));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ObraDTO> actualizarObra(
+            @PathVariable Long id,
+            @Valid @RequestBody ObraDTO obraDTO) {
+        return ResponseEntity.ok(obraService.modificarObra(id, obraDTO));
+    }
+
+
 
 
 

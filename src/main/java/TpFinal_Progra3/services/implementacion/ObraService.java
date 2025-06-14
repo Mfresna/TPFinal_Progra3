@@ -10,9 +10,11 @@ import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
 import TpFinal_Progra3.services.OpenStreetMapService;
+import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.interfaces.ObraServiceInterface;
 import TpFinal_Progra3.specifications.ObraSpecification;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Repository;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,6 +34,8 @@ public class ObraService implements ObraServiceInterface {
     private final ObraRepository obraRepository;
     private final EstudioArqRepository estudioArqRepository;
     private final ObraMapper obraMapper;
+    private final OpenStreetMapService openStreetMapService;
+
 
     @Override
     public ObraDTO crearObra(ObraDTO dto) {
@@ -63,6 +69,26 @@ public class ObraService implements ObraServiceInterface {
         }
         obraRepository.deleteById(id);
     }
+
+    public String obraEnMapa(int zoom, Long id)throws NotFoundException{
+        Obra obra = obraRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+
+        return openStreetMapService.generarMapaConMarcador(obra.getLatitud(), obra.getLongitud(), zoom);
+    }
+
+    public List<ObraDTO> obrasPorTerritorio(String ciudad, String pais){
+        Map<String, Double> coordenadas = openStreetMapService.areaDeCiudadPais(ciudad,pais);
+        return obraRepository.findByLatitudBetweenAndLongitudBetween(
+                coordenadas.get("latMin"),
+                coordenadas.get("latMax"),
+                coordenadas.get("lonMin"),
+                coordenadas.get("lonMax"))
+                .stream()
+                .map(obraMapper::mapDTO)
+                .toList();
+    }
+
 
     // FILTRADO DE OBRAS
     public List<ObraDTO> filtrarObras(ObraFiltroDTO filtro) {

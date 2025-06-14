@@ -9,7 +9,6 @@ public class ArquiTourBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ArquiTourBackendApplication.class, args);
-
 	}
 
 }

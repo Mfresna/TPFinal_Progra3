@@ -53,6 +53,30 @@ public class ObraController {
         return ResponseEntity.ok("Obra eliminada correctamente.");
     }
 
+    /* Devuelve toda la pagina entera, esta bueno para ver en el navegador pero en postman se ve feo
+    @GetMapping("/mapa/{id}")
+    public void obraEnMapa(@PathVariable Long id,
+                           @RequestParam(required = false,defaultValue = "16") @Min(1) @Max(19) int zoom,
+                           HttpServletResponse response) throws IOException {
+        //El link que devuelve service lo redirecciona con response en un 302 found
+        response.sendRedirect(obraService.obraEnMapa(zoom,id));
+    }*/
+
+    @GetMapping("/mapa/{id}")
+    public ResponseEntity<Map<String,String>> obraEnMapa(@PathVariable Long id,
+                           @RequestParam(required = false,defaultValue = "16") @Min(1) @Max(19) int zoom) {
+        return ResponseEntity.ok(Map.of("url:", obraService.obraEnMapa(zoom,id)));
+    }
+
+    @GetMapping("/area")
+    public ResponseEntity<List<ObraDTO>> obrasPorTerritorio(@RequestParam(required = false) String ciudad,
+                                                            @RequestParam String pais){
+        return ResponseEntity.ok(obraService.obrasPorTerritorio(ciudad,pais));
+    }
+
+
+
+
     @GetMapping("/filtrar")
     public ResponseEntity<List<ObraDTO>> filtrarObras(
             @RequestParam(required = false) CategoriaObra categoria,

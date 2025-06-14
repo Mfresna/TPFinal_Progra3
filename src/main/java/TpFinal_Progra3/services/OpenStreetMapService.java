@@ -4,10 +4,15 @@ import TpFinal_Progra3.Utils.CoordenadasUtils;
 import TpFinal_Progra3.exceptions.CoordenadaException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class OpenStreetMapService {
@@ -27,5 +32,31 @@ public class OpenStreetMapService {
                 "https://www.openstreetmap.org/?mlat=%.6f&mlon=%.6f#map=%d/%.6f/%.6f",
                 lat, lon, zoom, lat, lon
         );
+    }
+
+    public Map<String,Double> areaDeCiudadPais(String ciudad, String pais) {
+
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://nominatim.openstreetmap.org")
+                .defaultHeader(HttpHeaders.USER_AGENT, "ArquiTour")
+                .build();
+
+        String query;
+        if (ciudad != null && !ciudad.isBlank()) {
+            query = (pais != null && !pais.isBlank()) ? ciudad + "," + pais : ciudad;
+        } else {
+            query = pais;
+        }
+
+        return webClient.get().uri(uriBuilder -> uriBuilder
+                                .path("/search")
+                                .queryParam("q", query)
+                                .queryParam("format", "json")
+                                .queryParam("limit", 1)
+                                .build())
+                        .retrieve()
+                        .bodyToMono(List.class)
+                        .map(CoordenadasUtils::areaDeBusqueda)
+                        .block();
     }
 }

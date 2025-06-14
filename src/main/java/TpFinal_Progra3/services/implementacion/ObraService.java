@@ -6,13 +6,10 @@ import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import TpFinal_Progra3.model.DTO.ObraDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Obra;
-import TpFinal_Progra3.model.enums.CategoriaObra;
-import TpFinal_Progra3.model.enums.EstadoObra;
 import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
 import TpFinal_Progra3.services.IPLocationService;
-import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.interfaces.ObraServiceInterface;
 import TpFinal_Progra3.specifications.ObraSpecification;
@@ -21,16 +18,9 @@ import TpFinal_Progra3.utils.CoordenadasUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -144,5 +134,4 @@ public class ObraService implements ObraServiceInterface {
         Obra obraActualizada = obraRepository.save(obra);
         return obraMapper.mapDTO(obraActualizada);
     }
-
 }

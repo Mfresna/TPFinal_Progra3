@@ -8,8 +8,6 @@ import java.util.List;
 public interface EstudioArqServiceInterface {
     EstudioArqDTO crearEstudio(EstudioArqDTO estudio);
     EstudioArqDTO obtenerEstudio(Long id);
-    List<EstudioArqDTO> listarEstudios();
-    //void eliminarEstudio(Long id);
     List<EstudioArqDTO> filtrarEstudios(EstudioArqFiltroDTO filtro);
     //EstudioArqDTO agregarArquitectoAEstudio(Long estudioId, Long arquitectoId);
     EstudioArqDTO modificarEstudio(Long id, EstudioArqDTO dto);

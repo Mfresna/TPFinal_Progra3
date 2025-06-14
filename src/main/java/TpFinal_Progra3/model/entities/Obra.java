@@ -4,7 +4,6 @@ import TpFinal_Progra3.model.enums.CategoriaObra;
 import TpFinal_Progra3.model.enums.EstadoObra;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
 
 @Entity
@@ -19,16 +18,12 @@ public class Obra {
     private Long id;
 
     @Column(nullable = false)
-    //@NotBlank(message = "El nombre de la Obra no puede estar vacio.")
-    //@Size(min =2)
     private String nombre;
 
     @Column(nullable = false)
-    //@NotNull
     private Double latitud;
 
     @Column(nullable = false)
-    //@NotNull
     private Double longitud;
 
     @Enumerated(EnumType.STRING)
@@ -42,8 +37,6 @@ public class Obra {
     private CategoriaObra categoria;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    //@NotBlank(message = "Debe ingresar una descripcion de la Obra.")
-    //@Size(max = 16000000)
     private String descripcion;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -56,6 +49,5 @@ public class Obra {
 
     @ManyToOne
     @JoinColumn(name = "estudioarq_id",nullable = false) // Clave foránea en la tabla Obra
-    //@NotNull(message = "El estudio asociado no puede ser nulo.")
     private EstudioArq estudio;
 }

@@ -39,23 +39,6 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado con ID: " + id));
     }
 
-    @Override
-    public List<EstudioArqDTO> listarEstudios() {
-        return estudioArqRepository.findAll()
-                .stream()
-                .map(estudioArqMapper::mapDTO)
-                .toList();
-    }
-
-
-//    public void eliminarEstudio(Long id) {
-//        if (!estudioArqRepository.existsById(id)) {
-//            throw new NotFoundException("Estudio no encontrado.");
-//        }
-//        estudioArqRepository.deleteById(id);
-//    }
-
-    //FILTRAR ESTUDIOS
     public List<EstudioArqDTO> filtrarEstudios(EstudioArqFiltroDTO filtro) {
         List<EstudioArq> estudiosFiltrados = estudioArqRepository.findAll(EstudioArqSpecification.filtrar(filtro));
 
@@ -68,8 +51,7 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                 .toList();
     }
 
-    //ESPERAR A TENER USUARIOS Y ROLES PARA ESTA FUNCIONALIDAD
-
+//ESPERAR A TENER USUARIOS Y ROLES PARA ESTA FUNCIONALIDAD
 //    @Transactional
 //    public EstudioArqDTO agregarArquitectoAEstudio(Long estudioId, Long arquitectoId) {
 //        EstudioArq estudio = estudioArqRepository.findById(estudioId)

@@ -4,7 +4,6 @@ import TpFinal_Progra3.exceptions.IPLocationException;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -41,7 +40,7 @@ public class IPLocationService {
     }
 
     private IPLocationDTO mapearAUbicacion(String ip, @NotNull Map<String, Object> json) throws IPLocationException{
-            if(Boolean.FALSE.equals(json.get("success"))){
+        if(Boolean.FALSE.equals(json.get("success"))){
             //Hubo error
             if(json.containsKey("error")){
                 throw new IPLocationException(json.get("error").toString());

@@ -24,8 +24,5 @@ public class DotEnvConfig {
 
         //JWT
         System.setProperty("jwt.secret", Objects.requireNonNull(dotenv.get("JWT_SECRET")));
-
-        //UbicacionIP
-        System.setProperty("ip.location.api.key", Objects.requireNonNull(dotenv.get("IP_LOCATION_KEY")));
     }
 }

@@ -7,13 +7,18 @@ import TpFinal_Progra3.model.entities.Obra;
 import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.services.implementacion.ObraService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/obras")
@@ -44,4 +49,28 @@ public class ObraController {
         obraService.eliminarObra(id);
         return ResponseEntity.ok("Obra eliminada correctamente.");
     }
+
+    /* Devuelve toda la pagina entera, esta bueno para ver en el navegador pero en postman se ve feo
+    @GetMapping("/mapa/{id}")
+    public void obraEnMapa(@PathVariable Long id,
+                           @RequestParam(required = false,defaultValue = "16") @Min(1) @Max(19) int zoom,
+                           HttpServletResponse response) throws IOException {
+        //El link que devuelve service lo redirecciona con response en un 302 found
+        response.sendRedirect(obraService.obraEnMapa(zoom,id));
+    }*/
+
+    @GetMapping("/mapa/{id}")
+    public ResponseEntity<Map<String,String>> obraEnMapa(@PathVariable Long id,
+                           @RequestParam(required = false,defaultValue = "16") @Min(1) @Max(19) int zoom) {
+        return ResponseEntity.ok(Map.of("url:", obraService.obraEnMapa(zoom,id)));
+    }
+
+    @GetMapping("/area")
+    public ResponseEntity<List<ObraDTO>> obrasPorTerritorio(@RequestParam(required = false) String ciudad,
+                                                            @RequestParam String pais){
+        return ResponseEntity.ok(obraService.obrasPorTerritorio(ciudad,pais));
+    }
+
+
+
 }

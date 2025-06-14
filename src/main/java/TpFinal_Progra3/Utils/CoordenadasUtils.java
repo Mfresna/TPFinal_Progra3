@@ -2,8 +2,10 @@ package TpFinal_Progra3.Utils;
 
 import TpFinal_Progra3.exceptions.CoordenadaException;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -148,6 +150,32 @@ public class CoordenadasUtils {
         areaBusqueda.put("lonMax", (ubicacionUsuario.getLongitud() + deltaLon));
 
         return areaBusqueda;
+    }
+
+    //Obtiene las coordenadas por ciudad y pais
+    public static Map<String,Double> areaDeBusqueda(List<?> resultadoJson) {
+        if (resultadoJson == null || resultadoJson.isEmpty()){
+            throw new CoordenadaException(HttpStatus.INTERNAL_SERVER_ERROR,"El JSON recibido de la Api posee inconsitenticias");
+        }
+
+        Map<?, ?> area = (Map<?, ?>) resultadoJson.get(0);
+        List<String> coordenadas = (List<String>) area.get("boundingbox");
+
+        if (coordenadas == null || coordenadas.size() != 4){
+            throw new CoordenadaException(HttpStatus.INTERNAL_SERVER_ERROR,"El JSON recibido de la Api posee inconsitenticias");
+
+        }
+
+        try {
+            Map<String, Double> areaBusqueda = new HashMap<>();
+            areaBusqueda.put("latMin", Double.parseDouble(coordenadas.get(0)));
+            areaBusqueda.put("latMax", Double.parseDouble(coordenadas.get(1)));
+            areaBusqueda.put("lonMin", Double.parseDouble(coordenadas.get(2)));
+            areaBusqueda.put("lonMax", Double.parseDouble(coordenadas.get(3)));
+            return areaBusqueda;
+        } catch (NumberFormatException e) {
+            throw new CoordenadaException(HttpStatus.INTERNAL_SERVER_ERROR, "Las coordenadas no se pueden convertir.");
+        }
     }
 
 

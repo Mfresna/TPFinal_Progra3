@@ -10,11 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UbicacionIPTester {
 
     @Autowired
-    private IPLocationService IPLocationService;
+    private IPLocationService iPLocationService;
 
     @Test
     void testMiUbicacion(){
-            IPLocationDTO dto = IPLocationService.obtenerUbicacion("190.188.89.16").get();
+            IPLocationDTO dto = iPLocationService.obtenerUbicacion("190.188.89.16").get();
             System.out.println(dto);
 
     }

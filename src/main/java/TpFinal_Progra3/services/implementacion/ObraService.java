@@ -83,6 +83,24 @@ public class ObraService implements ObraServiceInterface {
                 .toList();
     }
 
+    public List<ObraDTO> obrasPorDistancia(HttpServletRequest request, Double distancia){
+
+        IPLocationDTO ipLocationUsuario =
+                ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
+                        .orElseThrow(() -> new IPLocationException(HttpStatus.CONFLICT,"No se puede obtener la Localizacion por IP"));
+
+        Map<String,Double> coordenadas = CoordenadasUtils.areaDeBusqueda(ipLocationUsuario, distancia);
+
+        return obraRepository.findByLatitudBetweenAndLongitudBetween(
+                        coordenadas.get("latMin"),
+                        coordenadas.get("latMax"),
+                        coordenadas.get("lonMin"),
+                        coordenadas.get("lonMax"))
+                .stream()
+                .map(obraMapper::mapDTO)
+                .toList();
+    }
+
     public List<ObraDTO> filtrarObras(ObraFiltroDTO filtro) {
 
         // Verificar existencia del estudio
@@ -125,23 +143,6 @@ public class ObraService implements ObraServiceInterface {
 
         Obra obraActualizada = obraRepository.save(obra);
         return obraMapper.mapDTO(obraActualizada);
-    }
-
-    public List<ObraDTO> obrasPorDistancia(HttpServletRequest request, Double distancia){
-        IPLocationDTO ipLocationUsuario =
-                ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
-                        .orElseThrow(() -> new IPLocationException(HttpStatus.CONFLICT,"No se puede obtener la Localizacion por IP"));
-        Map<String,Double> coordenadas = CoordenadasUtils.areaDeBusqueda(ipLocationUsuario, distancia);
-
-        return obraRepository.findByLatitudBetweenAndLongitudBetween(
-                coordenadas.get("latMin"),
-                coordenadas.get("latMax"),
-                coordenadas.get("lonMin"),
-                coordenadas.get("lonMax"))
-                .stream()
-                .map(obraMapper::mapDTO)
-                .toList();
-
     }
 
 }

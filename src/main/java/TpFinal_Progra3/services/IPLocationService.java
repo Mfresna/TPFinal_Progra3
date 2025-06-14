@@ -14,10 +14,7 @@ import java.util.Optional;
 @Service
 public class IPLocationService {
 
-    @Value("${ip.location.api.key}")
-    private String apiKey;
-
-    private final WebClient webClient = WebClient.create("http://api.ipstack.com");
+    private final WebClient webClient = WebClient.create("https://ipwho.is");
 
     // Extrae la IP del cliente desde la solicitud HTTP
     public String obtenerIpCliente(HttpServletRequest request) {
@@ -33,19 +30,18 @@ public class IPLocationService {
     //Devuelve un DTO con la ubicacion del cliente
     public Optional<IPLocationDTO> obtenerUbicacion(String ip){
 
-            return Optional.ofNullable(webClient.get().uri(uriBuilder -> uriBuilder
-                            .path("/" + ip)
-                            .queryParam("access_key", apiKey)
-                            .build())
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .map(json -> mapearAUbicacion(ip,json))
-                    .block());
+        return Optional.ofNullable(
+                webClient.get()
+                        .uri("/" + ip) // ← ipwho.is no requiere apiKey
+                        .retrieve()
+                        .bodyToMono(Map.class)
+                        .map(json -> mapearAUbicacion(ip, json))
+                        .block()
+        );
     }
 
     private IPLocationDTO mapearAUbicacion(String ip, @NotNull Map<String, Object> json) throws IPLocationException{
-        System.out.println(json);
-        if(Boolean.FALSE.equals(json.get("success"))){
+            if(Boolean.FALSE.equals(json.get("success"))){
             //Hubo error
             if(json.containsKey("error")){
                 throw new IPLocationException(json.get("error").toString());

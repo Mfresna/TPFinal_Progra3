@@ -2,11 +2,18 @@ package TpFinal_Progra3.services.implementacion;
 
 import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.model.DTO.EstudioArqDTO;
+import TpFinal_Progra3.model.DTO.filtros.EstudioArqFiltroDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
+import TpFinal_Progra3.model.entities.Imagen;
+import TpFinal_Progra3.model.entities.Usuario;
+import TpFinal_Progra3.repositories.UsuarioRepository;
 import TpFinal_Progra3.model.mappers.implementacion.EstudioArqMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.services.interfaces.EstudioArqServiceInterface;
+import TpFinal_Progra3.specifications.EstudioArqSpecification;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +24,7 @@ public class EstudioArqService implements EstudioArqServiceInterface {
 
     private final EstudioArqRepository estudioArqRepository;
     private final EstudioArqMapper estudioArqMapper;
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     public EstudioArqDTO crearEstudio(EstudioArqDTO dto) {
@@ -39,12 +47,79 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                 .toList();
     }
 
-    @Override
-    public boolean eliminarEstudio(Long id) {
-        if (!estudioArqRepository.existsById(id)) {
-            throw new NotFoundException("Estudio no encontrado.");
+
+//    public void eliminarEstudio(Long id) {
+//        if (!estudioArqRepository.existsById(id)) {
+//            throw new NotFoundException("Estudio no encontrado.");
+//        }
+//        estudioArqRepository.deleteById(id);
+//    }
+
+    //FILTRAR ESTUDIOS
+    public List<EstudioArqDTO> filtrarEstudios(EstudioArqFiltroDTO filtro) {
+        List<EstudioArq> estudiosFiltrados = estudioArqRepository.findAll(EstudioArqSpecification.filtrar(filtro));
+
+        if (estudiosFiltrados.isEmpty()) {
+            throw new NotFoundException("No se encontraron estudios con los filtros especificados.");
         }
-        estudioArqRepository.deleteById(id);
-        return true;
+
+        return estudiosFiltrados.stream()
+                .map(estudioArqMapper::mapDTO)
+                .toList();
     }
+
+    //ESPERAR A TENER USUARIOS Y ROLES PARA ESTA FUNCIONALIDAD
+
+//    @Transactional
+//    public EstudioArqDTO agregarArquitectoAEstudio(Long estudioId, Long arquitectoId) {
+//        EstudioArq estudio = estudioArqRepository.findById(estudioId)
+//                .orElseThrow(() -> new NotFoundException("Estudio no encontrado con ID: " + estudioId));
+//
+//        Usuario arquitecto = usuarioRepository.findById(arquitectoId)
+//                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + arquitectoId));
+//
+//        // Validar que el usuario esté activo
+//        if (!arquitecto.isActivo()) {
+//            throw new BadRequestException("El usuario no está activo."); // ver si puedo usar Coordenada exception pero cambiarle el nombre a Solicitud invalida exception
+//        }
+//
+//        // Validar que tenga el rol de ARQUITECTO
+//        boolean esArquitecto = arquitecto.getCredencial().getRoles().stream()
+//                .anyMatch(rol -> rol.getRol().name().equalsIgnoreCase("ARQUITECTO"));
+//
+//        if (!esArquitecto) {
+//            throw new BadRequestException("El usuario no tiene el rol de ARQUITECTO.");
+//        }
+//
+//        // Agregar el arquitecto si no está ya presente
+//        if (!estudio.getArquitectos().contains(arquitecto)) {
+//            estudio.getArquitectos().add(arquitecto);
+//            estudioArqRepository.save(estudio);
+//        }
+//
+//        return estudioArqMapper.mapDTO(estudio);
+//    }
+
+    @Transactional
+    public EstudioArqDTO modificarEstudio(Long id, EstudioArqDTO dto) {
+        EstudioArq estudio = estudioArqRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Estudio no encontrado con ID: " + id));
+
+        // Actualizar campos propios
+        estudio.setNombre(dto.getNombre());
+
+        // Actualizar imagen si corresponde
+        if (dto.getImagenUrl() != null && !dto.getImagenUrl().isBlank()) {
+            Imagen nuevaImagen = Imagen.builder().url(dto.getImagenUrl()).build();
+            estudio.setImagen(nuevaImagen);
+        }
+
+        EstudioArq actualizado = estudioArqRepository.save(estudio);
+        return estudioArqMapper.mapDTO(actualizado);
+    }
+
+
+
+
+
 }

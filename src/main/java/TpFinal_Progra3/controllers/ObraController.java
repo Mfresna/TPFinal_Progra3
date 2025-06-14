@@ -1,11 +1,13 @@
 package TpFinal_Progra3.controllers;
 
+import TpFinal_Progra3.model.DTO.EstudioArqDTO;
 import TpFinal_Progra3.model.DTO.ObraDTO;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
 import TpFinal_Progra3.model.enums.CategoriaObra;
 import TpFinal_Progra3.model.enums.EstadoObra;
 import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
+import TpFinal_Progra3.services.implementacion.EstudioArqService;
 import TpFinal_Progra3.services.implementacion.ObraService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -84,4 +86,6 @@ public class ObraController {
                                                            @RequestParam(required = false, defaultValue = "25") Double distanciaKm) {
         return ResponseEntity.ok(obraService.obrasPorDistancia(request, distanciaKm));
     }
+
+
 }

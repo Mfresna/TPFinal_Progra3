@@ -11,6 +11,9 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
+    // Buscar por ID
+    Optional<Usuario> findById(Long id);
+
     // Buscar por email directo en la entidad Usuario
     Optional<Usuario> findByEmailIgnoreCase(String email);
 

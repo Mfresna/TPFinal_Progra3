@@ -1,6 +1,7 @@
 package TpFinal_Progra3.services.interfaces;
 
 import TpFinal_Progra3.exceptions.NotFoundException;
+import TpFinal_Progra3.model.DTO.EstudioArqDTO;
 import TpFinal_Progra3.model.DTO.ObraDTO;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
 import TpFinal_Progra3.model.entities.Obra;
@@ -15,4 +16,5 @@ public interface ObraServiceInterface {
     String obraEnMapa(int zoom, Long id)throws NotFoundException;
     List<ObraDTO> obrasPorTerritorio(String ciudad, String pais);
     List<ObraDTO> filtrarObras(ObraFiltroDTO filtro);
+
 }

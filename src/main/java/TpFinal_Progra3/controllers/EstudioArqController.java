@@ -1,6 +1,7 @@
 package TpFinal_Progra3.controllers;
 
 import TpFinal_Progra3.model.DTO.EstudioArqDTO;
+import TpFinal_Progra3.model.DTO.filtros.EstudioArqFiltroDTO;
 import TpFinal_Progra3.services.implementacion.EstudioArqService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,41 @@ public class EstudioArqController {
         return ResponseEntity.ok(estudioArqService.listarEstudios());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarEstudio(@PathVariable Long id) {
-        estudioArqService.eliminarEstudio(id);
-        return ResponseEntity.ok("Estudio eliminado correctamente.");
+    //VER SI LO DEJAMOS O LO SACAMOS
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<String> eliminarEstudio(@PathVariable Long id) {
+//        estudioArqService.eliminarEstudio(id);
+//        return ResponseEntity.ok("Estudio eliminado correctamente.");
+//    }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<EstudioArqDTO>> filtrarEstudios(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Long obraId) {
+
+        EstudioArqFiltroDTO filtro = new EstudioArqFiltroDTO();
+        filtro.setNombre(nombre);
+        filtro.setObraId(obraId);
+
+        return ResponseEntity.ok(estudioArqService.filtrarEstudios(filtro));
     }
+
+//    @PutMapping("/{estudioId}/arquitectos/{arquitectoId}")
+//    public ResponseEntity<EstudioArqDTO> agregarArquitecto(
+//            @PathVariable Long estudioId,
+//            @PathVariable Long arquitectoId) {
+//
+//        EstudioArqDTO actualizado = estudioArqService.agregarArquitectoAEstudio(estudioId, arquitectoId);
+//        return ResponseEntity.ok(actualizado);
+//    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EstudioArqDTO> actualizarEstudio(
+            @PathVariable Long id,
+            @Valid @RequestBody EstudioArqDTO dto) {
+        return ResponseEntity.ok(estudioArqService.modificarEstudio(id, dto));
+    }
+
+
+
 }

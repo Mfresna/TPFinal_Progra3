@@ -11,8 +11,5 @@ import java.util.Optional;
 public interface ImagenRepository extends JpaRepository<Imagen, Long> {
 
     Optional<Imagen> findByUrl(String url);
-
-    List<Imagen> findByNombreIgnoreCase(String nombre);
-
     boolean existsByUrl(String url);
 }

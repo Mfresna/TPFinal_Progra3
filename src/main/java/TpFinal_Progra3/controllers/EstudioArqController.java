@@ -1,5 +1,6 @@
 package TpFinal_Progra3.controllers;
 
+import TpFinal_Progra3.model.DTO.EstudioArqBasicoDTO;
 import TpFinal_Progra3.model.DTO.EstudioArqDTO;
 import TpFinal_Progra3.model.DTO.filtros.EstudioArqFiltroDTO;
 import TpFinal_Progra3.services.implementacion.EstudioArqService;
@@ -19,7 +20,7 @@ public class EstudioArqController {
     private final EstudioArqService estudioArqService;
 
     @PostMapping
-    public ResponseEntity<EstudioArqDTO> crearEstudio(@RequestBody @Valid EstudioArqDTO dto) {
+    public ResponseEntity<EstudioArqDTO> crearEstudio(@RequestBody @Valid EstudioArqBasicoDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(estudioArqService.crearEstudio(dto));
     }
 

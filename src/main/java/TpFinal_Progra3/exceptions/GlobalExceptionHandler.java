@@ -42,7 +42,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(CargarImagenException.class)
+    public ResponseEntity<String> handlerCargarImagenException(CargarImagenException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
     }
 
     // Manejo de excepciones para errores en el cuerpo de la solicitud

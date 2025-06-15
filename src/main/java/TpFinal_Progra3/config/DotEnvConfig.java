@@ -24,5 +24,10 @@ public class DotEnvConfig {
 
         //JWT
         System.setProperty("jwt.secret", Objects.requireNonNull(dotenv.get("JWT_SECRET")));
+
+        //CLOUDINARY IMAGENES
+        System.setProperty("cloud.name", Objects.requireNonNull(dotenv.get("TU_CLOUD_NAME")));
+        System.setProperty("cloud.key", Objects.requireNonNull(dotenv.get("TU_API_KEY")));
+        System.setProperty("cloud.secret", Objects.requireNonNull(dotenv.get("TU_API_SECRET")));
     }
 }

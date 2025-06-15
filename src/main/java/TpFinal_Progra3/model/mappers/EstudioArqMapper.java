@@ -1,7 +1,9 @@
-package TpFinal_Progra3.model.mappers.implementacion;
+package TpFinal_Progra3.model.mappers;
 
+import TpFinal_Progra3.model.DTO.EstudioArqBasicoDTO;
 import TpFinal_Progra3.model.DTO.EstudioArqDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
+import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.entities.Obra;
 import TpFinal_Progra3.model.entities.Usuario;
 import org.springframework.stereotype.Component;
@@ -13,9 +15,10 @@ import java.util.stream.Collectors;
 public class EstudioArqMapper {
 
     // Convertir de DTO a entidad
-    public EstudioArq mapEstudio(EstudioArqDTO dto) {
+    public EstudioArq mapEstudio(EstudioArqBasicoDTO dto, Imagen img) {
         return EstudioArq.builder()
                 .nombre(dto.getNombre())
+                .imagen(img)
                 .build();
     }
 

@@ -5,10 +5,12 @@ import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import TpFinal_Progra3.model.DTO.ObraDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
+import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.entities.Obra;
-import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
+import TpFinal_Progra3.model.mappers.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
+import TpFinal_Progra3.services.CloudinaryService;
 import TpFinal_Progra3.services.IPLocationService;
 import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.interfaces.ObraServiceInterface;
@@ -19,24 +21,31 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class ObraService implements ObraServiceInterface {
+public class ObraService implements ObraServiceInterface{
 
     private final ObraRepository obraRepository;
     private final EstudioArqRepository estudioArqRepository;
     private final ObraMapper obraMapper;
     private final OpenStreetMapService openStreetMapService;
     private final IPLocationService ipLocationService;
+    private final ImagenService imagenService;
 
     public ObraDTO crearObra(ObraDTO dto) {
         EstudioArq estudio = estudioArqRepository.findById(dto.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado"));
 
-        Obra obraGuardada = obraRepository.save(obraMapper.mapObra(dto, estudio));
+        List<Imagen> imagenesObra = dto.getUrlsImagenes().stream()
+                .map(imagenService::obtenerImagen)
+                .toList();
+
+        Obra obraGuardada = obraRepository.save(obraMapper.mapObra(dto,estudio,imagenesObra));
 
         return obraMapper.mapDTO(obraGuardada);
     }
@@ -63,11 +72,12 @@ public class ObraService implements ObraServiceInterface {
 
     public List<ObraDTO> obrasPorTerritorio(String ciudad, String pais){
         Map<String, Double> coordenadas = openStreetMapService.areaDeCiudadPais(ciudad,pais);
+
         return obraRepository.findByLatitudBetweenAndLongitudBetween(
-                coordenadas.get("latMin"),
-                coordenadas.get("latMax"),
-                coordenadas.get("lonMin"),
-                coordenadas.get("lonMax"))
+                        coordenadas.get("latMin"),
+                        coordenadas.get("latMax"),
+                        coordenadas.get("lonMin"),
+                        coordenadas.get("lonMax"))
                 .stream()
                 .map(obraMapper::mapDTO)
                 .toList();
@@ -101,16 +111,9 @@ public class ObraService implements ObraServiceInterface {
             }
         }
 
-        // Aplicar los filtros
-        List<Obra> obrasFiltradas = obraRepository.findAll(ObraSpecification.filtrar(filtro));
-
-        // Verificar si hay resultados
-        if (obrasFiltradas.isEmpty()) {
-            throw new NotFoundException("No se encontraron obras con los filtros especificados.");
-        }
-
-        // Mapear resultados
-        return obrasFiltradas.stream()
+        // Aplicar los filtro y Mapear resultados
+        return obraRepository.findAll(ObraSpecification.filtrar(filtro))
+                .stream()
                 .map(obraMapper::mapDTO)
                 .toList();
     }
@@ -133,5 +136,14 @@ public class ObraService implements ObraServiceInterface {
 
         Obra obraActualizada = obraRepository.save(obra);
         return obraMapper.mapDTO(obraActualizada);
+    }
+
+    public void eliminarImagenes(Long id, List<String> urlImagenes){
+        Obra obra = obraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+
+        obra.getImagenes().removeIf(imagen -> urlImagenes.contains(imagen.getUrl()));
+
+        obraRepository.save(obra);
     }
 }

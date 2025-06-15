@@ -1,19 +1,18 @@
 package TpFinal_Progra3.services.implementacion;
 
 import TpFinal_Progra3.exceptions.NotFoundException;
+import TpFinal_Progra3.model.DTO.EstudioArqBasicoDTO;
 import TpFinal_Progra3.model.DTO.EstudioArqDTO;
 import TpFinal_Progra3.model.DTO.filtros.EstudioArqFiltroDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Imagen;
-import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.repositories.UsuarioRepository;
-import TpFinal_Progra3.model.mappers.implementacion.EstudioArqMapper;
+import TpFinal_Progra3.model.mappers.EstudioArqMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.services.interfaces.EstudioArqServiceInterface;
 import TpFinal_Progra3.specifications.EstudioArqSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,14 +24,13 @@ public class EstudioArqService implements EstudioArqServiceInterface {
     private final EstudioArqRepository estudioArqRepository;
     private final EstudioArqMapper estudioArqMapper;
     private final UsuarioRepository usuarioRepository;
+    private final ImagenService imagenService;
 
-    @Override
-    public EstudioArqDTO crearEstudio(EstudioArqDTO dto) {
-        EstudioArq estudioGuardado = estudioArqRepository.save(estudioArqMapper.mapEstudio(dto));
-        return estudioArqMapper.mapDTO(estudioGuardado);
+    public EstudioArqDTO crearEstudio(EstudioArqBasicoDTO dto){
+        Imagen img = imagenService.obtenerImagen(dto.getImagenUrl());
+        return estudioArqMapper.mapDTO(estudioArqRepository.save(estudioArqMapper.mapEstudio(dto, img)));
     }
 
-    @Override
     public EstudioArqDTO obtenerEstudio(Long id) {
         return estudioArqRepository.findById(id)
                 .map(estudioArqMapper::mapDTO)

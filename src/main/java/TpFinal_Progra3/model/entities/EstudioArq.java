@@ -17,7 +17,6 @@ public class EstudioArq {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    //@NotBlank(message = "El nombre del estudio no puede estar vacio.")
     private String nombre;
 
     @OneToMany(mappedBy = "estudio")
@@ -26,7 +25,7 @@ public class EstudioArq {
     @ManyToMany(mappedBy = "estudios")
     private List<Usuario> arquitectos;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "imagen_id")
     private Imagen imagen;
 }

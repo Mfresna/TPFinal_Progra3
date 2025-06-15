@@ -1,5 +1,6 @@
 package TpFinal_Progra3.controllers;
 
+import TpFinal_Progra3.model.DTO.EstudioArqBasicoDTO;
 import TpFinal_Progra3.model.DTO.EstudioArqDTO;
 import TpFinal_Progra3.model.DTO.filtros.EstudioArqFiltroDTO;
 import TpFinal_Progra3.services.implementacion.EstudioArqService;
@@ -19,7 +20,7 @@ public class EstudioArqController {
     private final EstudioArqService estudioArqService;
 
     @PostMapping
-    public ResponseEntity<EstudioArqDTO> crearEstudio(@RequestBody @Valid EstudioArqDTO dto) {
+    public ResponseEntity<EstudioArqDTO> crearEstudio(@RequestBody @Valid EstudioArqBasicoDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(estudioArqService.crearEstudio(dto));
     }
 
@@ -28,22 +29,9 @@ public class EstudioArqController {
         return ResponseEntity.ok(estudioArqService.obtenerEstudio(id));
     }
 
-    @GetMapping
-    public ResponseEntity<List<EstudioArqDTO>> listarEstudios() {
-        return ResponseEntity.ok(estudioArqService.listarEstudios());
-    }
-
-    //VER SI LO DEJAMOS O LO SACAMOS
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<String> eliminarEstudio(@PathVariable Long id) {
-//        estudioArqService.eliminarEstudio(id);
-//        return ResponseEntity.ok("Estudio eliminado correctamente.");
-//    }
-
     @GetMapping("/filtrar")
-    public ResponseEntity<List<EstudioArqDTO>> filtrarEstudios(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) Long obraId) {
+    public ResponseEntity<List<EstudioArqDTO>> filtrarEstudios(@RequestParam(required = false) String nombre,
+                                                               @RequestParam(required = false) Long obraId) {
 
         EstudioArqFiltroDTO filtro = new EstudioArqFiltroDTO();
         filtro.setNombre(nombre);
@@ -62,12 +50,9 @@ public class EstudioArqController {
 //    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstudioArqDTO> actualizarEstudio(
-            @PathVariable Long id,
-            @Valid @RequestBody EstudioArqDTO dto) {
+    public ResponseEntity<EstudioArqDTO> actualizarEstudio(@PathVariable Long id,
+                                                           @Valid @RequestBody EstudioArqDTO dto) {
         return ResponseEntity.ok(estudioArqService.modificarEstudio(id, dto));
     }
-
-
 
 }

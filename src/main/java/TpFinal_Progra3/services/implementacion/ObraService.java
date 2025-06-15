@@ -4,15 +4,15 @@ import TpFinal_Progra3.exceptions.IPLocationException;
 import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import TpFinal_Progra3.model.DTO.ObraDTO;
+import TpFinal_Progra3.model.DTO.ObraResponseDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
+import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.entities.Obra;
-import TpFinal_Progra3.model.enums.CategoriaObra;
-import TpFinal_Progra3.model.enums.EstadoObra;
-import TpFinal_Progra3.model.mappers.implementacion.ObraMapper;
+import TpFinal_Progra3.model.mappers.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
+import TpFinal_Progra3.services.CloudinaryService;
 import TpFinal_Progra3.services.IPLocationService;
-import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.interfaces.ObraServiceInterface;
 import TpFinal_Progra3.specifications.ObraSpecification;
@@ -21,39 +21,39 @@ import TpFinal_Progra3.utils.CoordenadasUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ObraService implements ObraServiceInterface {
+public class ObraService{
 
     private final ObraRepository obraRepository;
     private final EstudioArqRepository estudioArqRepository;
     private final ObraMapper obraMapper;
     private final OpenStreetMapService openStreetMapService;
     private final IPLocationService ipLocationService;
+    private final ImagenService imagenService;
 
-    public ObraDTO crearObra(ObraDTO dto) {
+    public ObraResponseDTO crearObra(ObraDTO dto) {
         EstudioArq estudio = estudioArqRepository.findById(dto.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado"));
 
-        Obra obraGuardada = obraRepository.save(obraMapper.mapObra(dto, estudio));
+        List<Imagen> imagenesObra = dto.getUrlsImagenes().stream()
+                .map(imagenService::obtenerImagen)
+                .toList();
 
-        return obraMapper.mapDTO(obraGuardada);
+        Obra obraGuardada = obraRepository.save(obraMapper.mapObra(dto,estudio,imagenesObra));
+
+        return obraMapper.mapResponseDTO(obraGuardada);
     }
 
-    public ObraDTO obtenerObra(Long id) {
+    public ObraResponseDTO obtenerObra(Long id) {
         return obraRepository.findById(id)
-                .map(obraMapper::mapDTO)
+                .map(obraMapper::mapResponseDTO)
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
     }
 
@@ -71,19 +71,20 @@ public class ObraService implements ObraServiceInterface {
         return openStreetMapService.generarMapaConMarcador(obra.getLatitud(), obra.getLongitud(), zoom);
     }
 
-    public List<ObraDTO> obrasPorTerritorio(String ciudad, String pais){
+    public List<ObraResponseDTO> obrasPorTerritorio(String ciudad, String pais){
         Map<String, Double> coordenadas = openStreetMapService.areaDeCiudadPais(ciudad,pais);
+
         return obraRepository.findByLatitudBetweenAndLongitudBetween(
-                coordenadas.get("latMin"),
-                coordenadas.get("latMax"),
-                coordenadas.get("lonMin"),
-                coordenadas.get("lonMax"))
+                        coordenadas.get("latMin"),
+                        coordenadas.get("latMax"),
+                        coordenadas.get("lonMin"),
+                        coordenadas.get("lonMax"))
                 .stream()
-                .map(obraMapper::mapDTO)
+                .map(obraMapper::mapResponseDTO)
                 .toList();
     }
 
-    public List<ObraDTO> obrasPorDistancia(HttpServletRequest request, Double distancia){
+    public List<ObraResponseDTO> obrasPorDistancia(HttpServletRequest request, Double distancia){
 
         IPLocationDTO ipLocationUsuario =
                 ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
@@ -97,11 +98,11 @@ public class ObraService implements ObraServiceInterface {
                         coordenadas.get("lonMin"),
                         coordenadas.get("lonMax"))
                 .stream()
-                .map(obraMapper::mapDTO)
+                .map(obraMapper::mapResponseDTO)
                 .toList();
     }
 
-    public List<ObraDTO> filtrarObras(ObraFiltroDTO filtro) {
+    public List<ObraResponseDTO> filtrarObras(ObraFiltroDTO filtro) {
 
         // Verificar existencia del estudio
         if (filtro.getEstudioId() != null) {
@@ -111,21 +112,14 @@ public class ObraService implements ObraServiceInterface {
             }
         }
 
-        // Aplicar los filtros
-        List<Obra> obrasFiltradas = obraRepository.findAll(ObraSpecification.filtrar(filtro));
-
-        // Verificar si hay resultados
-        if (obrasFiltradas.isEmpty()) {
-            throw new NotFoundException("No se encontraron obras con los filtros especificados.");
-        }
-
-        // Mapear resultados
-        return obrasFiltradas.stream()
-                .map(obraMapper::mapDTO)
+        // Aplicar los filtro y Mapear resultados
+        return obraRepository.findAll(ObraSpecification.filtrar(filtro))
+                .stream()
+                .map(obraMapper::mapResponseDTO)
                 .toList();
     }
 
-    public ObraDTO modificarObra(Long id, ObraDTO obraDTO) {
+    public ObraResponseDTO modificarObra(Long id, ObraDTO obraDTO) {
         Obra obra = obraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
 
@@ -142,7 +136,34 @@ public class ObraService implements ObraServiceInterface {
         obra.setEstudio(estudio);
 
         Obra obraActualizada = obraRepository.save(obra);
-        return obraMapper.mapDTO(obraActualizada);
+        return obraMapper.mapResponseDTO(obraActualizada);
     }
+
+    public List<Imagen> listarImagenes(Long id){
+        return obraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id))
+                .getImagenes();
+    }
+
+    public void eliminarImagenes(Long id, List<String> urlImagenes){
+        Obra obra = obraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+
+        obra.getImagenes().removeIf(imagen -> urlImagenes.contains(imagen.getUrl()));
+
+        obraRepository.save(obra);
+    }
+
+    public ObraResponseDTO agregarImagenes(Long id, List<String> urlImagenes){
+        Obra obra = obraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+
+        obra.getImagenes().addAll(urlImagenes.stream()
+                .map(imagenService::obtenerImagen)
+                .toList());
+
+        return obraMapper.mapResponseDTO(obraRepository.save(obra));
+    }
+
 
 }

@@ -1,11 +1,13 @@
 package TpFinal_Progra3.services.interfaces;
 
 import TpFinal_Progra3.model.DTO.ImagenDTO;
+import TpFinal_Progra3.model.entities.Imagen;
+
 import java.util.List;
 
 public interface ImagenServiceInterface {
-    ImagenDTO crearImagen(ImagenDTO imagen);
+    Imagen crearImagen(ImagenDTO imagen);
     ImagenDTO obtenerImagen(Long id);
-    List<ImagenDTO> listarImagenes();
-    boolean eliminarImagen(Long id);
+    Imagen obtenerImagen(String url);
+    void eliminarImagen(Long id);
 }

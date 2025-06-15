@@ -1,15 +1,19 @@
-package TpFinal_Progra3.model.mappers.implementacion;
+package TpFinal_Progra3.model.mappers;
 
 import TpFinal_Progra3.model.DTO.ObraDTO;
+import TpFinal_Progra3.model.DTO.ObraResponseDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
+import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.entities.Obra;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ObraMapper {
 
     // Convertir de DTO a entidad
-    public Obra mapObra(ObraDTO obraDto, EstudioArq estudio) {
+    public Obra mapObra(ObraDTO obraDto, EstudioArq estudio, List<Imagen> imagenes) {
         return Obra.builder()
                 .nombre(obraDto.getNombre())
                 .latitud(obraDto.getLatitud())
@@ -19,6 +23,7 @@ public class ObraMapper {
                 .estado(obraDto.getEstado())
                 .categoria(obraDto.getCategoria())
                 .estudio(estudio)
+                .imagenes(imagenes)
                 .build();
     }
 
@@ -33,6 +38,23 @@ public class ObraMapper {
                 .estado(obra.getEstado())
                 .categoria(obra.getCategoria())
                 .estudioId(obra.getEstudio().getId())
+                .urlsImagenes(obra.getImagenes().stream().map(Imagen::getUrl).toList())
+                .build();
+    }
+
+    // Convertir de entidad a DTO (si lo necesitás para devolver en un GET)
+    public ObraResponseDTO mapResponseDTO(Obra obra) {
+        return ObraResponseDTO.builder()
+                .id(obra.getId())
+                .nombre(obra.getNombre())
+                .latitud(obra.getLatitud())
+                .longitud(obra.getLongitud())
+                .descripcion(obra.getDescripcion())
+                .anioEstado(obra.getAnioEstado())
+                .estado(obra.getEstado())
+                .categoria(obra.getCategoria())
+                .estudioId(obra.getEstudio().getId())
+                .urlsImagenes(obra.getImagenes().stream().map(Imagen::getUrl).toList())
                 .build();
     }
 }

@@ -1,10 +1,13 @@
 package TpFinal_Progra3.model.DTO;
 
+import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.enums.CategoriaObra;
 import TpFinal_Progra3.model.enums.EstadoObra;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Builder
 @Data
@@ -40,4 +43,9 @@ public class ObraDTO {
     @NotNull(message = "El ID del estudio es obligatorio.")
     @Positive(message = "El ID del estudio debe ser un número positivo.")
     private Long estudioId;
+
+    private List<@Size(max = 2048, message = "La URL no debe superar los 2048 caracteres.")
+                @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
+                        message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+            String> urlsImagenes;
 }

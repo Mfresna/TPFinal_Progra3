@@ -14,9 +14,6 @@ public class Imagen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
-    private String tipo; // Puede ser JPG, PNG, etc.
-
     @Column(unique = true, nullable = false)
     private String url;
 }

@@ -3,11 +3,15 @@ package TpFinal_Progra3.services.implementacion;
 import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.model.DTO.ImagenDTO;
 import TpFinal_Progra3.model.entities.Imagen;
-import TpFinal_Progra3.model.mappers.implementacion.ImagenMapper;
+import TpFinal_Progra3.model.mappers.ImagenMapper;
 import TpFinal_Progra3.repositories.ImagenRepository;
+import TpFinal_Progra3.services.CloudinaryService;
 import TpFinal_Progra3.services.interfaces.ImagenServiceInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,34 +21,47 @@ public class ImagenService implements ImagenServiceInterface {
 
     private final ImagenRepository imagenRepository;
     private final ImagenMapper imagenMapper;
+    private final CloudinaryService cloudinaryService;
 
-    @Override
-    public ImagenDTO crearImagen(ImagenDTO dto) {
-        Imagen imagenGuardada = imagenRepository.save(imagenMapper.mapImagen(dto));
-        return imagenMapper.mapDTO(imagenGuardada);
+    public Imagen crearImagen(ImagenDTO dto) {
+        return imagenRepository.save(imagenMapper.mapImagen(dto));
     }
 
-    @Override
     public ImagenDTO obtenerImagen(Long id) {
         return imagenRepository.findById(id)
                 .map(imagenMapper::mapDTO)
                 .orElseThrow(() -> new NotFoundException("Imagen no encontrada con ID: " + id));
     }
 
-    @Override
-    public List<ImagenDTO> listarImagenes() {
-        return imagenRepository.findAll()
-                .stream()
-                .map(imagenMapper::mapDTO)
-                .toList();
+    public Imagen obtenerImagen(String url) {
+        //Si no la encuentra la crea y la guarda en la bdd
+        return imagenRepository.findByUrl(url)
+                //.orElseThrow(() -> new NotFoundException("Imagen no encontrada con URL: " + url));
+
+                //SOLO PARA TESTEO
+                .orElseGet(() -> crearImagen(ImagenDTO.builder()
+                        .url(url)
+                        .build()));
     }
 
-    @Override
-    public boolean eliminarImagen(Long id) {
+    public void eliminarImagen(Long id) {
         if (!imagenRepository.existsById(id)) {
             throw new NotFoundException("Imagen no encontrada.");
         }
         imagenRepository.deleteById(id);
-        return true;
     }
+
+    public List<String> subirImagenes(List<MultipartFile> archivos){
+        //Sube las imagenes y las guarda en la base de datos
+        List<String> urls = cloudinaryService.subirImagenes(archivos);
+
+        urls.forEach(url->crearImagen(ImagenDTO.builder()
+                        .url(url)
+                        .build()));
+
+        return urls;
+    }
+
+
+
 }

@@ -6,7 +6,6 @@ import TpFinal_Progra3.model.DTO.EstudioArqDTO;
 import TpFinal_Progra3.model.DTO.filtros.EstudioArqFiltroDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Imagen;
-import TpFinal_Progra3.repositories.UsuarioRepository;
 import TpFinal_Progra3.model.mappers.EstudioArqMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.services.interfaces.EstudioArqServiceInterface;
@@ -23,7 +22,6 @@ public class EstudioArqService implements EstudioArqServiceInterface {
 
     private final EstudioArqRepository estudioArqRepository;
     private final EstudioArqMapper estudioArqMapper;
-    private final UsuarioRepository usuarioRepository;
     private final ImagenService imagenService;
 
     public EstudioArqDTO crearEstudio(EstudioArqBasicoDTO dto){

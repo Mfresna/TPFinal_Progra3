@@ -36,6 +36,9 @@ public class ImagenService implements ImagenServiceInterface {
     public Imagen obtenerImagen(String url) {
         //Si no la encuentra la crea y la guarda en la bdd
         return imagenRepository.findByUrl(url)
+                //.orElseThrow(() -> new NotFoundException("Imagen no encontrada con URL: " + url));
+
+                //SOLO PARA TESTEO
                 .orElseGet(() -> crearImagen(ImagenDTO.builder()
                         .url(url)
                         .build()));
@@ -49,8 +52,14 @@ public class ImagenService implements ImagenServiceInterface {
     }
 
     public List<String> subirImagenes(List<MultipartFile> archivos){
-        return cloudinaryService.subirImagenes(archivos);
+        //Sube las imagenes y las guarda en la base de datos
+        List<String> urls = cloudinaryService.subirImagenes(archivos);
 
+        urls.forEach(url->crearImagen(ImagenDTO.builder()
+                        .url(url)
+                        .build()));
+
+        return urls;
     }
 
 

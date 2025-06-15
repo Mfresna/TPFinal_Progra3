@@ -1,7 +1,9 @@
 package TpFinal_Progra3.controllers;
 
 import TpFinal_Progra3.model.DTO.ObraDTO;
+import TpFinal_Progra3.model.DTO.ObraResponseDTO;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
+import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.entities.Obra;
 import TpFinal_Progra3.model.enums.CategoriaObra;
 import TpFinal_Progra3.model.enums.EstadoObra;
@@ -30,12 +32,12 @@ public class ObraController {
     private final ObraService obraService;
 
     @PostMapping
-    public ResponseEntity<ObraDTO> crearObra(@RequestBody @Valid ObraDTO dto) {
+    public ResponseEntity<ObraResponseDTO> crearObra(@RequestBody @Valid ObraDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(obraService.crearObra(dto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ObraDTO> obtenerObra(@PathVariable @Positive Long id) {
+    public ResponseEntity<ObraResponseDTO> obtenerObra(@PathVariable @Positive Long id) {
         return ResponseEntity.ok(obraService.obtenerObra(id));
     }
 
@@ -52,20 +54,20 @@ public class ObraController {
     }
 
     @GetMapping("/area")
-    public ResponseEntity<List<ObraDTO>> obrasPorTerritorio(@RequestParam(required = false) String ciudad,
+    public ResponseEntity<List<ObraResponseDTO>> obrasPorTerritorio(@RequestParam(required = false) String ciudad,
                                                             @RequestParam String pais){
         return ResponseEntity.ok(obraService.obrasPorTerritorio(ciudad,pais));
     }
 
     //Key: X-Forwarded-For - Value: mi ip publica
     @GetMapping("/cercanas")
-    public ResponseEntity<List<ObraDTO>> obrasPorDistancia(HttpServletRequest request,
+    public ResponseEntity<List<ObraResponseDTO>> obrasPorDistancia(HttpServletRequest request,
                                                            @RequestParam(required = false, defaultValue = "25") @Positive Double distanciaKm) {
         return ResponseEntity.ok(obraService.obrasPorDistancia(request, distanciaKm));
     }
 
     @GetMapping("/filtrar")
-    public ResponseEntity<List<ObraDTO>> filtrarObras(
+    public ResponseEntity<List<ObraResponseDTO>> filtrarObras(
             @RequestParam(required = false) CategoriaObra categoria,
             @RequestParam(required = false) EstadoObra estado,
             @RequestParam(required = false) @Positive Long estudioId) {
@@ -79,17 +81,30 @@ public class ObraController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ObraDTO> actualizarObra(
+    public ResponseEntity<ObraResponseDTO> actualizarObra(
             @PathVariable @Positive Long id,
             @Valid @RequestBody ObraDTO obraDTO) {
         return ResponseEntity.ok(obraService.modificarObra(id, obraDTO));
     }
 
-    @DeleteMapping("/{id}/eliminar-imagenes")
+    //---------------IMAGENES
+
+    @GetMapping("/{id}/imagenes")
+    public ResponseEntity<List<Imagen>> listarImagenes(@PathVariable @Positive Long id){
+        return ResponseEntity.ok(obraService.listarImagenes(id));
+    }
+
+    @DeleteMapping("/{id}/imagenes")
     public ResponseEntity<String> eliminarImagenes(@PathVariable @Positive Long id,
-                                                   @RequestBody List<@Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$") String> urlsABorrar) {
-        obraService.eliminarImagenes(id,urlsABorrar);
+                                                   @RequestBody List<@Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$") String> urlBorrar) {
+        obraService.eliminarImagenes(id,urlBorrar);
         return ResponseEntity.ok("Imagenes Eliminadas Existosamente");
+    }
+
+    @PutMapping("/{id}/imagenes")
+    public ResponseEntity<ObraResponseDTO> agregarImagenes(@PathVariable @Positive Long id,
+                                                   @RequestBody List<@Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$") String> urlAgregar) {
+        return ResponseEntity.ok(obraService.agregarImagenes(id,urlAgregar));
     }
 
 }

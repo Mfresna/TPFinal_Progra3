@@ -3,8 +3,6 @@ package TpFinal_Progra3.services.interfaces;
 import TpFinal_Progra3.model.DTO.ImagenDTO;
 import TpFinal_Progra3.model.entities.Imagen;
 
-import java.util.List;
-
 public interface ImagenServiceInterface {
     Imagen crearImagen(ImagenDTO imagen);
     ImagenDTO obtenerImagen(Long id);

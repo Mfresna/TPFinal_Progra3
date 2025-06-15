@@ -11,7 +11,6 @@ import TpFinal_Progra3.model.entities.Obra;
 import TpFinal_Progra3.model.mappers.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
-import TpFinal_Progra3.services.CloudinaryService;
 import TpFinal_Progra3.services.IPLocationService;
 import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.interfaces.ObraServiceInterface;
@@ -22,14 +21,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class ObraService{
+public class ObraService implements ObraServiceInterface{
 
     private final ObraRepository obraRepository;
     private final EstudioArqRepository estudioArqRepository;
@@ -164,6 +161,5 @@ public class ObraService{
 
         return obraMapper.mapResponseDTO(obraRepository.save(obra));
     }
-
 
 }

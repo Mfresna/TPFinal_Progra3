@@ -10,6 +10,7 @@ import TpFinal_Progra3.model.mappers.ObraMapper;
 import TpFinal_Progra3.model.mappers.UsuarioMapper;
 import TpFinal_Progra3.repositories.UsuarioRepository;
 import TpFinal_Progra3.security.model.entities.Credencial;
+import TpFinal_Progra3.security.model.entities.Rol;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
 import TpFinal_Progra3.security.repositories.RolRepository;
 import TpFinal_Progra3.specifications.UsuarioSpecification;
@@ -26,18 +27,42 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
     private final RolRepository RolRepository;
+    private final ImagenService imagenService;
+    private final JwtService jwtService;
 
+    //VERIFICAR
+//    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
+//        //Validar la existencia de un email
+//        if(usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())){
+//            throw new CredencialException("El email ya existe en la base de datos.");
+//        }
+//
+//        //CREAMOS UNA CREDENCIAL PARA PRUEBA, DESPUES CAMBIAR
+//        Rol rol = Rol.builder()
+//                .rol(RolUsuario.ROLE_USUARIO)
+//                .build();
+//        Credencial credencial = Credencial.builder()
+//                .email(dto.getEmail())
+//                .password(dto.getPassword())
+//                .roles(Set.of(rol))
+//                .build();
+//        //--------------------------
+//
+//        Imagen img = null;
+//        if(dto.getImagenUrl() != null) {
+//           img=imagenService.obtenerImagen(dto.getImagenUrl());
+//        }
+//
+//        Usuario usuario = usuarioMapper.mapUsuario(dto, img);
+//        usuario.setCredencial(credencial);
+//
+//        return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
+//
+//    }
 
-    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
-        //Validar la existencia de un email
-        if(usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())){
-            throw new CredencialException("El email ya existe en la base de datos.");
-        }
-        //CREAMOS UNA CREDENCIAL PARA PRUEBA, DESPUES CAMBIAR
-        Credencial credencial = Credencial.builder()
-                .email(dto.getEmail())
-                .password(dto.getPassword())
-
+    public Usuario buscarUsuario(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + id));
     }
 
     public UsuarioResponseDTO obtenerUsuario(Long id) {

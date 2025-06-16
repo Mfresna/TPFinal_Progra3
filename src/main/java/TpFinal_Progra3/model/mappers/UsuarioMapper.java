@@ -40,7 +40,7 @@ public class UsuarioMapper {
                 .apellido(usuario.getApellido())
                 .fechaNacimiento(usuario.getFechaNacimiento())
                 .descripcion(usuario.getDescripcion())
-                .urlImagen(usuario.getImagen().getUrl())
+                .urlImagen(usuario.getImagen() != null ? usuario.getImagen().getUrl() : null)
                 .idEstudios(usuario.getEstudios().stream().map(EstudioArq::getId).toList())
                 .listaFavoritos(usuario.getListaFavoritos().stream()
                         .map(f -> FavoritoBasicoDTO.builder()

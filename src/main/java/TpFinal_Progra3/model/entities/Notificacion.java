@@ -25,7 +25,10 @@ public class Notificacion {
     private Usuario receptor;
 
     private String mensaje;
-    private LocalDateTime fecha;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private LocalDateTime fecha = LocalDateTime.now();
 
     @Builder.Default //Hace que leido se defina false si no se especifica en builder
     @Column(nullable = false)

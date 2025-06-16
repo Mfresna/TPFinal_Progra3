@@ -10,9 +10,11 @@ import java.util.List;
 @Repository
 public interface NotificacionRepository extends JpaRepository<Notificacion, Long> {
 
-    List<Notificacion> findByReceptor(Usuario receptor);
+    List<Notificacion> findByReceptor_Id(Long receptorIdr);
 
-    List<Notificacion> findByReceptorAndIsLeidoFalse(Usuario receptor);
+    //List<Notificacion> findByReceptorAndIsLeidoFalse(Long receptorId);
 
-    List<Notificacion> findByEmisor(Usuario emisor);
+    //List<Notificacion> findByReceptorAndIsLeidoTrue(Long receptorId);
+
+    List<Notificacion> findByEmisor_Id(Long emisorId);
 }

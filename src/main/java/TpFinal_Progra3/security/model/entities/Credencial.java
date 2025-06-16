@@ -31,15 +31,17 @@ public class Credencial implements UserDetails{
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(mappedBy = "credencial",fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "usuario_id", referencedColumnName = "email", unique = true)
+    //@OneToOne(mappedBy = "credencial",fetch = FetchType.LAZY)
     private Usuario usuario;
 
     //Con las credenciales trae el rol del usuario, este rol lo trae inmediatamente cuando se carga el usr por eso el EAGER
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_credencial",
-            joinColumns = @JoinColumn(name = "credential_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            joinColumns = @JoinColumn(name = "credencial_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
     private Set<Rol> roles = new HashSet<>();
 

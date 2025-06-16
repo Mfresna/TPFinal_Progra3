@@ -23,6 +23,7 @@ public class Usuario {
     //@Size(max = 100)
     private String email;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credencial_id", referencedColumnName = "id", nullable = false, unique = true)
     private Credencial credencial;

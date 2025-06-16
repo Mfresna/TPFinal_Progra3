@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class UsuarioMapper {
 
     // Convertir de DTO a entidad
-    public Usuario mapObra(UsuarioDTO usuarioDTO, Imagen imagen) {
+    public Usuario mapUsuario(UsuarioDTO usuarioDTO, Imagen imagen) {
         return Usuario.builder()
                 .email(usuarioDTO.getEmail())
                 .nombre(usuarioDTO.getNombre())

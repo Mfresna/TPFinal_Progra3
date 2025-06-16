@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
     // Manejo de excepciones para conflictos, como al intentar creaar un usuario con un email ya existente
     @ExceptionHandler(CredencialException.class)
     public ResponseEntity<String> handleCredencial(CredencialException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getReason());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
     @ExceptionHandler(ProcesoInvalidoException.class)

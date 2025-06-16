@@ -7,4 +7,7 @@ public class CredencialException extends ResponseStatusException {
     public CredencialException(String mensaje) {
         super(HttpStatus.CONFLICT, mensaje);
     }
+    public CredencialException(HttpStatus status, String mensaje) {
+        super(status, mensaje);
+    }
 }

@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.function.Function;
 
 /// MANEJADOR DE TOKENS
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${jwt.secret}")
@@ -45,6 +47,17 @@ public class JwtService {
         return TokenID(userId, jwtVencimientoTokenEmail);
     }
 
+    //Valida que un token sea valido, comparando que el username sea el mismo y que no este expirado.
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()))
+                && !isTokenExpired(token)
+                && userDetails.isAccountNonLocked()
+                && userDetails.isEnabled();
+    }
+
+    //---------------METODOS PRIVADOS----------------
+
     //Extrae una claim especifica
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -59,15 +72,6 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    //Valida que un token sea valido, comparando que el username sea el mismo y que no este expirado.
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()))
-                && !isTokenExpired(token)
-                && userDetails.isAccountNonLocked()
-                && userDetails.isEnabled();
     }
 
     //Construye un token

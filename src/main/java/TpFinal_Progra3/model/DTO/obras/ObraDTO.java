@@ -1,6 +1,5 @@
 package TpFinal_Progra3.model.DTO.obras;
 
-import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.enums.CategoriaObra;
 import TpFinal_Progra3.model.enums.EstadoObra;
 import jakarta.validation.constraints.*;

@@ -28,21 +28,6 @@ public class ObraMapper {
     }
 
     // Convertir de entidad a DTO (si lo necesitás para devolver en un GET)
-    public ObraDTO mapDTO(Obra obra) {
-        return ObraDTO.builder()
-                .nombre(obra.getNombre())
-                .latitud(obra.getLatitud())
-                .longitud(obra.getLongitud())
-                .descripcion(obra.getDescripcion())
-                .anioEstado(obra.getAnioEstado())
-                .estado(obra.getEstado())
-                .categoria(obra.getCategoria())
-                .estudioId(obra.getEstudio().getId())
-                .urlsImagenes(obra.getImagenes().stream().map(Imagen::getUrl).toList())
-                .build();
-    }
-
-    // Convertir de entidad a DTO (si lo necesitás para devolver en un GET)
     public ObraResponseDTO mapResponseDTO(Obra obra) {
         return ObraResponseDTO.builder()
                 .id(obra.getId())

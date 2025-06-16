@@ -63,17 +63,4 @@ public class Usuario {
     @JoinColumn(name = "usuario_id")
     private List<Favorito> listaFavoritos;
 
-    //Tengo que sacar las credenciales pq al printearlo entra en bucle
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", fechaNacimiento=" + fechaNacimiento +
-                ", isActivo=" + isActivo +
-                '}';
-    }
 }

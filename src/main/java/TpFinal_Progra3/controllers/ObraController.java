@@ -84,7 +84,7 @@ public class ObraController {
         return ResponseEntity.ok(obraService.modificarObra(id, obraDTO));
     }
 
-    //---------------IMAGENES
+    //---------------IMAGENES----------------
 
     @GetMapping("/{id}/imagenes")
     public ResponseEntity<List<Imagen>> listarImagenes(@PathVariable @Positive Long id){

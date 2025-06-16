@@ -33,7 +33,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    //Genera el token con los roles,  hace uso de BuildToken.
+    //Genera el token con los roles, hace uso de BuildToken.
     public String generarToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", userDetails.getAuthorities());

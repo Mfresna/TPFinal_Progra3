@@ -1,10 +1,9 @@
 package TpFinal_Progra3.controllers;
 
-import TpFinal_Progra3.model.DTO.ObraDTO;
-import TpFinal_Progra3.model.DTO.ObraResponseDTO;
+import TpFinal_Progra3.model.DTO.obras.ObraDTO;
+import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
 import TpFinal_Progra3.model.entities.Imagen;
-import TpFinal_Progra3.model.entities.Obra;
 import TpFinal_Progra3.model.enums.CategoriaObra;
 import TpFinal_Progra3.model.enums.EstadoObra;
 import TpFinal_Progra3.services.implementacion.ObraService;
@@ -16,10 +15,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;

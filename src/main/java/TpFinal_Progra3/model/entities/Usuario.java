@@ -27,13 +27,6 @@ public class Usuario {
     @JoinColumn(name = "credencial_id", referencedColumnName = "id", nullable = false, unique = true)
     private Credencial credencial;
 
-    @Column(columnDefinition = "TEXT")
-    private String descripcion;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "imagen_id")
-    private Imagen imagen;
-
     @Column(nullable = false, length = 20)
     //@Size(min = 1, max = 20, message = "El nombre es demasiado largo")
     //@NotBlank(message = "El nombre no puede estar vacio")
@@ -46,6 +39,13 @@ public class Usuario {
     @Column(nullable = false)
     //@Past(message = "La fecha de nacimiento debe ser anterior a hoy")
     private LocalDate fechaNacimiento;
+
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "imagen_id")
+    private Imagen imagen;
 
     @Builder.Default //Hace que activo se defina true si no se especifica en builder
     @Column(nullable = false)

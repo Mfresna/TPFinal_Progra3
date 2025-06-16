@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 
 import java.util.*;
@@ -100,6 +99,13 @@ public class GlobalExceptionHandler {
                 "error", "Parámetro inválido",
                 "detalle", ex.getMessage()));
     }
+
+    // Manejo de excepciones para conflictos, como al intentar creaar un usuario con un email ya existente
+    @ExceptionHandler(CredencialException.class)
+    public ResponseEntity<String> handleCredencial(CredencialException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getReason());
+    }
+
 }
 
 

@@ -1,14 +1,13 @@
 package TpFinal_Progra3.services.interfaces;
 
 import TpFinal_Progra3.exceptions.NotFoundException;
-import TpFinal_Progra3.model.DTO.ObraDTO;
-import TpFinal_Progra3.model.DTO.ObraResponseDTO;
+import TpFinal_Progra3.model.DTO.obras.ObraDTO;
+import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
 import TpFinal_Progra3.model.entities.Imagen;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ObraServiceInterface {
     public ObraResponseDTO crearObra(ObraDTO dto);

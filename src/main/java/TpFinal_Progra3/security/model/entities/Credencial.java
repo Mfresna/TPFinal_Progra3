@@ -69,7 +69,8 @@ public class Credencial implements UserDetails{
     @Override
     public boolean isEnabled() {
         //Devuelve si el usuario esta Activo
-        return usuario.getIsActivo();
+        //return usuario.getIsActivo();
+        return true;
     }
 
 }

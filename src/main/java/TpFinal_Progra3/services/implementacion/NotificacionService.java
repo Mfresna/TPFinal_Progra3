@@ -1,4 +1,5 @@
 package TpFinal_Progra3.services.implementacion;
+import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
 import TpFinal_Progra3.model.DTO.notificaciones.NotificacionDTO;
 import TpFinal_Progra3.model.DTO.notificaciones.NotificacionResponseDTO;
 import TpFinal_Progra3.model.entities.Notificacion;
@@ -22,6 +23,7 @@ public class NotificacionService {
     public NotificacionResponseDTO crearNotificacion(HttpServletRequest request, NotificacionDTO dto) {
 
         Usuario emisor = usuarioService.buscarUsuario(usuarioService.obtenerMiPerfil(request).getId());
+        if(emisor.getId().equals(dto.getIdReceptor())) {throw new ProcesoInvalidoException("El Receptor no puede ser igual al Emisor");}
         Usuario receptor = usuarioService.buscarUsuario(dto.getIdReceptor());
 
         Notificacion notificacion = Notificacion.builder()
@@ -34,6 +36,15 @@ public class NotificacionService {
         return notificacionMapper.mapResponseDto(notificacionRepository.save(notificacion));
     }
 
+//    public List<NotificacionResponseDTO> obtenerRecibidas(HttpServletRequest request, Boolean isLeidas) {
+//        Long receptorId = usuarioService.obtenerMiPerfil(request).getId();
+//
+//        return notificacionRepository.findByReceptor_Id(receptorId).stream()
+//                .filter(n -> isLeidas == null || n.getIsLeido().equals(isLeidas))
+//                .map(notificacionMapper::mapResponseDto)
+//                .toList();
+//    }
+
     public List<NotificacionResponseDTO> obtenerRecibidas(HttpServletRequest request, Boolean isLeidas) {
         Long receptorId = usuarioService.obtenerMiPerfil(request).getId();
 
@@ -42,6 +53,7 @@ public class NotificacionService {
                 .map(notificacionMapper::mapResponseDto)
                 .toList();
     }
+
 
     public List<NotificacionResponseDTO> obtenerEnviadas(HttpServletRequest request) {
 

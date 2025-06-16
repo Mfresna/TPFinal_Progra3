@@ -106,6 +106,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getReason());
     }
 
+    @ExceptionHandler(ProcesoInvalidoException.class)
+    public ResponseEntity<String> handlerProcesos(ProcesoInvalidoException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+    }
+
 }
 
 

@@ -41,10 +41,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
-        // Configura las reglas de autorización para las solicitudes HTTP.
-        http.authorizeHttpRequests(auth -> auth
+                // Configura las reglas de autorización para las solicitudes HTTP.
+                http.authorizeHttpRequests(auth -> auth
                         //autenticacion sin restriccion
-//                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**","/v3/api-docs/**","/swagger-ui/**","swagger-ui.html","/proxy/**")
+                                .permitAll()
                         // Otros EndPoints deben estar autenticados
 //                        .anyRequest().authenticated())
                 .anyRequest().permitAll())

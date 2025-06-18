@@ -6,6 +6,7 @@ import TpFinal_Progra3.model.entities.Notificacion;
 import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.model.mappers.NotificacionMapper;
 import TpFinal_Progra3.repositories.NotificacionRepository;
+import TpFinal_Progra3.services.interfaces.NotificacionServiceinterface;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NotificacionService {
+public class NotificacionService implements NotificacionServiceinterface {
 
     private final UsuarioService usuarioService;
     private final NotificacionRepository notificacionRepository;
@@ -36,14 +37,6 @@ public class NotificacionService {
         return notificacionMapper.mapResponseDto(notificacionRepository.save(notificacion));
     }
 
-//    public List<NotificacionResponseDTO> obtenerRecibidas(HttpServletRequest request, Boolean isLeidas) {
-//        Long receptorId = usuarioService.obtenerMiPerfil(request).getId();
-//
-//        return notificacionRepository.findByReceptor_Id(receptorId).stream()
-//                .filter(n -> isLeidas == null || n.getIsLeido().equals(isLeidas))
-//                .map(notificacionMapper::mapResponseDto)
-//                .toList();
-//    }
 
     public List<NotificacionResponseDTO> obtenerRecibidas(HttpServletRequest request, Boolean isLeidas) {
         Long receptorId = usuarioService.obtenerMiPerfil(request).getId();

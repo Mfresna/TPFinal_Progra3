@@ -1,15 +1,6 @@
 -- === ROLES ===
-INSERT INTO roles (id, rol) VALUES
-                                (1, 'ROLE_ADMINISTRADOR'),
-                                (2, 'ROLE_ARQUITECTO'),
-                                (3, 'ROLE_USUARIO');
 
 -- === CREDENCIALES ===
-INSERT INTO credenciales (id, email, password) VALUES
-                                                   (1, 'admin@email.com', 'admin123'),
-                                                   (2, 'arqui@email.com', 'arqui123'),
-                                                   (3, 'user@email.com', 'user123'),
-                                                   (4, 'matias@email.com', '$2a$10$MPoxX3VxQUNf2mdcHkJIjegjpVmP5EcyMK5CugjHuDa3uuif8fCM.');
 
 -- === USUARIOS ===
 INSERT INTO usuarios (id, email, nombre, apellido, fecha_nacimiento, descripcion, is_activo, credencial_id)
@@ -20,10 +11,7 @@ VALUES
     (4, 'matias@email.com', 'Lucía', 'Usuario', '1995-05-20', 'Usuario visitante', true, 4);
 
 -- === RELACIÓN CREDENCIAL - ROL ===
-INSERT INTO roles_credencial (credencial_id, rol_id) VALUES
-                                                       (1, 1), -- Ana -> ADMIN
-                                                       (2, 2), -- Carlos -> ARQUITECTO
-                                                       (3, 3); -- Lucía -> USUARIO
+
 
 -- ==== ESTUDIOS ====
 INSERT INTO estudios_arq (nombre)

@@ -2,15 +2,19 @@ package TpFinal_Progra3.services.implementacion;
 
 import TpFinal_Progra3.exceptions.IPLocationException;
 import TpFinal_Progra3.exceptions.NotFoundException;
+import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
+import TpFinal_Progra3.model.DTO.usuarios.UsuarioResponseDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.entities.Obra;
+import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.model.mappers.ObraMapper;
 import TpFinal_Progra3.repositories.EstudioArqRepository;
 import TpFinal_Progra3.repositories.ObraRepository;
+import TpFinal_Progra3.security.model.enums.RolUsuario;
 import TpFinal_Progra3.services.IPLocationService;
 import TpFinal_Progra3.services.OpenStreetMapService;
 import TpFinal_Progra3.services.interfaces.ObraServiceInterface;
@@ -19,7 +23,9 @@ import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
 import TpFinal_Progra3.utils.CoordenadasUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +40,15 @@ public class ObraService implements ObraServiceInterface{
     private final OpenStreetMapService openStreetMapService;
     private final IPLocationService ipLocationService;
     private final ImagenService imagenService;
+    private final UsuarioService usuarioService;
 
-    public ObraResponseDTO crearObra(ObraDTO dto) {
+    public ObraResponseDTO crearObra(HttpServletRequest request, ObraDTO dto) {
         EstudioArq estudio = estudioArqRepository.findById(dto.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado"));
+
+        if(!puedeGestionarObra(request, dto.getEstudioId())) {
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede crear obras para un estudio que no forma parte.");
+        }
 
         List<Imagen> imagenesObra = dto.getUrlsImagenes().stream()
                 .map(imagenService::obtenerImagen)
@@ -48,16 +59,19 @@ public class ObraService implements ObraServiceInterface{
         return obraMapper.mapResponseDTO(obraGuardada);
     }
 
-    public ObraResponseDTO obtenerObra(Long id) {
-        return obraRepository.findById(id)
-                .map(obraMapper::mapResponseDTO)
-                .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+    public ObraResponseDTO obtenerObraResponseDTO(Long id) {
+        return obraMapper.mapResponseDTO(obtenerObra(id));
     }
 
-    public void eliminarObra(Long id) throws NotFoundException {
+    public void eliminarObra(HttpServletRequest request,Long id) throws NotFoundException {
         if (!obraRepository.existsById(id)) {
             throw new NotFoundException("Obra no encontrada.");
         }
+
+        if(!puedeGestionarObra(request,id)) {
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede eliminar obras para un estudio que no forma parte.");
+        }
+
         obraRepository.deleteById(id);
     }
 
@@ -116,12 +130,16 @@ public class ObraService implements ObraServiceInterface{
                 .toList();
     }
 
-    public ObraResponseDTO modificarObra(Long id, ObraDTO obraDTO) {
+    public ObraResponseDTO modificarObra(HttpServletRequest request, Long id, ObraDTO obraDTO) {
         Obra obra = obraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
 
         EstudioArq estudio = estudioArqRepository.findById(obraDTO.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio de arquitectura no encontrado con ID: " + obraDTO.getEstudioId()));
+
+        if(!puedeGestionarObra(request,id)) {
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede modificar obras para un estudio que no forma parte.");
+        }
 
         obra.setNombre(obraDTO.getNombre());
         obra.setLatitud(obraDTO.getLatitud());
@@ -142,18 +160,26 @@ public class ObraService implements ObraServiceInterface{
                 .getImagenes();
     }
 
-    public void eliminarImagenes(Long id, List<String> urlImagenes){
+    public void eliminarImagenes(HttpServletRequest request, Long id, List<String> urlImagenes){
         Obra obra = obraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+
+        if(!puedeGestionarObra(request,id)){
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede eliminar imagenes de obras para un estudio que no forma parte.");
+        }
 
         obra.getImagenes().removeIf(imagen -> urlImagenes.contains(imagen.getUrl()));
 
         obraRepository.save(obra);
     }
 
-    public ObraResponseDTO agregarImagenes(Long id, List<String> urlImagenes){
+    public ObraResponseDTO agregarImagenes(HttpServletRequest request, Long id, List<String> urlImagenes){
         Obra obra = obraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+
+        if(!puedeGestionarObra(request,id)){
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede agregar imagenes de obras para un estudio que no forma parte.");
+        }
 
         obra.getImagenes().addAll(urlImagenes.stream()
                 .map(imagenService::obtenerImagen)
@@ -162,4 +188,22 @@ public class ObraService implements ObraServiceInterface{
         return obraMapper.mapResponseDTO(obraRepository.save(obra));
     }
 
+    public List<Obra> obtenerObrasPorIds(List<Long> ids) {
+        return ids.stream()
+                .map(id -> obraRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id)))
+                .toList();
+    }
+
+    public Obra obtenerObra(Long id) {
+        return obraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
+    }
+
+    private boolean puedeGestionarObra(HttpServletRequest request, Long id){
+        Usuario usr = usuarioService.buscarUsuario(request);
+
+        return usr.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)
+                || usr.getEstudios().stream().anyMatch(e -> e.getId().equals(id));
+    }
 }

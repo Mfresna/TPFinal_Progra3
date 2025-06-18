@@ -1,14 +1,17 @@
 package TpFinal_Progra3.exceptions;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -100,6 +103,25 @@ public class GlobalExceptionHandler {
                 "detalle", ex.getMessage()));
     }
 
+   // Detecta y maneja las excepciones de Valid en los DTO
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        Map<String, String> errores = new HashMap<>();
+
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errores.put(error.getField(), error.getDefaultMessage());
+        });
+
+        Map<String, Object> cuerpo = new LinkedHashMap<>();
+        cuerpo.put("status", HttpStatus.BAD_REQUEST.value());
+        cuerpo.put("error", "Error de validación");
+        cuerpo.put("path", request.getRequestURI());
+        cuerpo.put("timestamp", LocalDateTime.now());
+        cuerpo.put("mensajes", errores);
+
+        return ResponseEntity.badRequest().body(cuerpo);
+    }
+
     // Manejo de excepciones para conflictos, como al intentar creaar un usuario con un email ya existente
     @ExceptionHandler(CredencialException.class)
     public ResponseEntity<String> handleCredencial(CredencialException e) {
@@ -108,6 +130,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProcesoInvalidoException.class)
     public ResponseEntity<String> handlerProcesos(ProcesoInvalidoException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+    }
+
+    @ExceptionHandler(BorradoException.class)
+    public ResponseEntity<String> handlerBorradoException(BorradoException e) {
         return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
     }
 

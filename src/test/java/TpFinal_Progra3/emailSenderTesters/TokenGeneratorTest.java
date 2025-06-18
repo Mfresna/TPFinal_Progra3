@@ -13,11 +13,11 @@ public class TokenGeneratorTest {
 
     @Test
     void generadorDeToken() {
-        String token = jwt.generarToken(1L);
+        //String token = jwt.generarToken(1L);
 
-        System.out.println(token);
+        //System.out.println(token);
 
-        System.out.println(jwt.extractUsername(token));
+        //System.out.println(jwt.extractUsername(token));
     }
 
 

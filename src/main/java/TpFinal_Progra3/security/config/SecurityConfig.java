@@ -4,9 +4,11 @@ import TpFinal_Progra3.security.filters.JwtAuthenticationFilter;
 import TpFinal_Progra3.security.filters.RestAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -18,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true) //PERMITE VERIFICAR EL ROL EN CADA ENDPOINT
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -43,11 +46,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
         // Configura las reglas de autorización para las solicitudes HTTP.
         http.authorizeHttpRequests(auth -> auth
+                        // Swagger + OpenAPI
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         //autenticacion sin restriccion
-//                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
                         // Otros EndPoints deben estar autenticados
-//                        .anyRequest().authenticated())
-                .anyRequest().permitAll())
+                        .anyRequest().authenticated())
 
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

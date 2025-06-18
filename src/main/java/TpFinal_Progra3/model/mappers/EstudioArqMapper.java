@@ -1,7 +1,7 @@
 package TpFinal_Progra3.model.mappers;
 
-import TpFinal_Progra3.model.DTO.EstudioArqBasicoDTO;
-import TpFinal_Progra3.model.DTO.EstudioArqDTO;
+import TpFinal_Progra3.model.DTO.estudios.EstudioArqBasicoDTO;
+import TpFinal_Progra3.model.DTO.estudios.EstudioArqDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
 import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.entities.Obra;

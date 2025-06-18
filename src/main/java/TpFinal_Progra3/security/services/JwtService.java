@@ -1,5 +1,7 @@
 package TpFinal_Progra3.security.services;
 
+import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
+import TpFinal_Progra3.model.entities.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +9,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +47,13 @@ public class JwtService {
     }
 
     //Genera un Token solo con el ID del usuario para que cambie la contraseña por mail
-    public String generarToken(Long userId) {
-        return TokenID(userId, jwtVencimientoTokenEmail);
+    public String generarToken(Usuario usuario) {
+        if(!usuario.getIsActivo()){
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN,"El usuario está inhabilitado.");
+        }
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("isActive", usuario.getIsActivo());  //Si llega acá siempre
+        return buildToken(claims, usuario.getEmail() , jwtVencimientoTokenEmail);
     }
 
     //Valida que un token sea valido, comparando que el username sea el mismo y que no este expirado.
@@ -55,6 +64,18 @@ public class JwtService {
                 && userDetails.isAccountNonLocked()
                 && userDetails.isEnabled();
     }
+
+    //Valida que el Token Restaurar Contraseña sea Valido
+    public boolean isTokenValid(String token) {
+        String email = extractUsername(token);
+        Boolean isActive = extractAllClaims(token).get("isActive", Boolean.class);
+
+        //True => isActivo y no está vencido
+        return email != null &&
+               isActive != null && isActive &&
+               !isTokenExpired(token);
+    }
+
 
     //---------------METODOS PRIVADOS----------------
 
@@ -85,10 +106,11 @@ public class JwtService {
                 .compact();
     }
 
-    //Construye un token solo con el ID (sirve para recuperar Pass)
-    private String TokenID(Long userId, long vencimiento) {
+    //Construye un token para recuperar Pass (sirve para recuperar Pass)
+    private String buildToken(Map<String, Object> extraClaims, String emailUsuario, long vencimiento) {
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setClaims(extraClaims) //Contiene el EMAIL y el isActivo
+                .setSubject(emailUsuario)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + vencimiento))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

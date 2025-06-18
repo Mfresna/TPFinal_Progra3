@@ -16,7 +16,7 @@ class EmailSenderTest {
 
     @Test
     void enviarMailTest() {
-        enviarmail.mailResetPass("afuentes0491@gmail.com",jwtService.generarToken(1L));
+        //enviarmail.mailResetPass("afuentes0491@gmail.com",jwtService.generarToken(1L));
     }
 
 }

@@ -34,12 +34,7 @@ public class ImagenService implements ImagenServiceInterface {
     public Imagen obtenerImagen(String url) {
         //Si no la encuentra la crea y la guarda en la bdd
         return imagenRepository.findByUrl(url)
-                //.orElseThrow(() -> new NotFoundException("Imagen no encontrada con URL: " + url));
-
-                //SOLO PARA TESTEO
-                .orElseGet(() -> crearImagen(ImagenDTO.builder()
-                        .url(url)
-                        .build()));
+                .orElseThrow(() -> new NotFoundException("Imagen no encontrada con URL: " + url));
     }
 
     public void eliminarImagen(Long id) {

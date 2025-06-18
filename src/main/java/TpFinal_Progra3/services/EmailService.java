@@ -20,25 +20,9 @@ public class EmailService {
             MimeMessage mensajePersonalizado = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensajePersonalizado, true);
 
-            //Armar url con el token
-            String urlReset = "localhost:8080/usr/rest-pass/" + token;
-
-            String cuerpoHtml = "<html>" +
-                    "<body style='font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px;'>" +
-                    "<h2 style='color: #2E86C1;'>Restablecimiento de Contraseña</h2>" +
-                    "<p style='color: #555;'>Hemos recibido una solicitud para restaurar tu contraseña.</p>" +
-                    "<p>Si no realizaste esta acción, puedes ignorar este mensaje.</p>" +
-                    "<div style='margin: 20px auto;'>" +
-                    "<a href='" + urlReset + "' style='text-decoration: none; display: inline-block; padding: 10px 20px; " +
-                    "background-color: #2E86C1; color: white; font-weight: bold; border-radius: 5px;'>Restaurar Contraseña</a>" +
-                    "</div>" +
-                    "<p style='color: #999;'>Este enlace expirará en 24 horas.</p>" +
-                    "</body>" +
-                    "</html>";
-
             helper.setTo(emailUsuario);
             helper.setSubject("Restablecer su Contraseña de ArquiTour");
-            helper.setText(cuerpoHtml, true);
+            helper.setText(generarCuerpo(token), true);
 
             //Email desde el que se manda el correo (CARGADO EN .ENV)
             helper.setFrom(System.getProperty("spring.mail.username"));
@@ -55,6 +39,26 @@ public class EmailService {
         }catch (Exception e) {
             throw new EmailNoEnviadoException("Error en el envio del Email para restaurar la contraseña.\n" + e.getMessage());
         }
+    }
+
+    private String generarCuerpo (String token){
+        System.out.println(token);
+        String urlReset = "http://localhost:8080/auth/password/" + token;
+
+        return "<html>" +
+                "<body style='font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px;'>" +
+                "<h2 style='color: #2E86C1;'>Restablecimiento de Contraseña</h2>" +
+                "<p style='color: #555;'>Hemos recibido una solicitud para restaurar tu contraseña.</p>" +
+                "<p>Si no realizaste esta acción, puedes ignorar este mensaje.</p>" +
+                "<div style='margin: 20px auto;'>" +
+                "<a href='" + urlReset + "' style='text-decoration: none; display: inline-block; padding: 10px 20px; " +
+                "background-color: #2E86C1; color: white; font-weight: bold; border-radius: 5px;'>Restaurar Contraseña</a>" +
+                "</div>" +
+                "<p style='color: #999;'>Este enlace expirará en 24 horas.</p>" +
+                "</body>" +
+                "</html>";
+
+
     }
 
 }

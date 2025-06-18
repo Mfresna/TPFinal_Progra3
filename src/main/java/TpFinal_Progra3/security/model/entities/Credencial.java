@@ -1,6 +1,7 @@
 package TpFinal_Progra3.security.model.entities;
 
 import TpFinal_Progra3.model.entities.Usuario;
+import TpFinal_Progra3.security.model.enums.RolUsuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,7 +34,7 @@ public class Credencial implements UserDetails{
     private String password;
 
     @OneToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "email", unique = true)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true)
     //@OneToOne(mappedBy = "credencial",fetch = FetchType.LAZY)
     private Usuario usuario;
 
@@ -56,6 +58,10 @@ public class Credencial implements UserDetails{
         return authorities;
     }
 
+    public boolean tieneRolUsuario (RolUsuario rol){
+        return roles.stream().map(Rol::getRol).anyMatch(r -> r.equals(rol));
+    }
+
     @Override
     public String getPassword() {
         return this.password;
@@ -69,8 +75,10 @@ public class Credencial implements UserDetails{
     @Override
     public boolean isEnabled() {
         //Devuelve si el usuario esta Activo
-        //return usuario.getIsActivo();
-        return true;
+        return usuario.getIsActivo();
+        //return true;
     }
+
+
 
 }

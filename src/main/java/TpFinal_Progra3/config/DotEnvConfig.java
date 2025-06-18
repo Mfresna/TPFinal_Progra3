@@ -29,5 +29,9 @@ public class DotEnvConfig {
         System.setProperty("cloud.name", Objects.requireNonNull(dotenv.get("TU_CLOUD_NAME")));
         System.setProperty("cloud.key", Objects.requireNonNull(dotenv.get("TU_API_KEY")));
         System.setProperty("cloud.secret", Objects.requireNonNull(dotenv.get("TU_API_SECRET")));
+
+        //CREDENCIALES ADMINISTRADOR DEFAULT
+        System.setProperty("default.admin.email", Objects.requireNonNull(dotenv.get("DEFAULT_ADMIN_EMAIL")));
+        System.setProperty("default.admin.password", Objects.requireNonNull(dotenv.get("DEFAULT_ADMIN_PASSWORD")));
     }
 }

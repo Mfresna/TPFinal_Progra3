@@ -4,6 +4,7 @@ import TpFinal_Progra3.security.model.entities.Credencial;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -52,16 +53,17 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean isActivo = true;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "usuarios_estudio",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "estudio_id")
     )
-    private List<EstudioArq> estudios; //Un usr puede pertenecer a muchos estudios y un estudio tener muchos usr
+    private List<EstudioArq> estudios = new ArrayList<>(); //Un usr puede pertenecer a muchos estudios y un estudio tener muchos usr
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "usuario_id")
-    private List<Favorito> listaFavoritos;
+    @Builder.Default
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorito> listaFavoritos = new ArrayList<>();
 
 }

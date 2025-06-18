@@ -26,6 +26,10 @@ public class Favorito {
     @Column(nullable = false)
     private String nombreLista;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     @ManyToMany
     @JoinTable(
             name = "obras_favorito",

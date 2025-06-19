@@ -211,13 +211,13 @@ public class UsuarioService implements UsuarioServiceInterface {
             throw new ProcesoInvalidoException("El usuario " + id + " no puede quitarse roles a su propia cuenta.");
         }
 
-        if(obtenerMiPerfil(request).getEmail().equals(defaultAdminEmail)){
-            throw new ProcesoInvalidoException("Al usuario " + id + " no se le puede quitar roles.");
-        }
-
         Usuario usr = buscarUsuario(id);
         if(!usr.getIsActivo()){
             throw new ProcesoInvalidoException("No se permite modificar los roles de un usuario inhabilitado");
+        }
+
+        if(usr.getEmail().equals(defaultAdminEmail)){
+            throw new ProcesoInvalidoException("Al usuario " + id + " no se le puede quitar roles.");
         }
 
         if(rolesDTO.getRoles().contains(RolUsuario.ROLE_USUARIO)){

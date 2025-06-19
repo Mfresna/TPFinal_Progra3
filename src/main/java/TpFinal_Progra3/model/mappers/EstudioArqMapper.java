@@ -25,6 +25,7 @@ public class EstudioArqMapper {
     // Convertir de entidad a DTO
     public EstudioArqDTO mapDTO(EstudioArq estudio) {
         return EstudioArqDTO.builder()
+                .id(estudio.getId())
                 .nombre(estudio.getNombre())
                 .obrasIds(estudio.getObras() != null ? estudio.getObras().stream().map(Obra::getId).collect(Collectors.toList()) : new ArrayList<>())
                 .arquitectosIds(estudio.getArquitectos() != null ? estudio.getArquitectos().stream().map(Usuario::getId).collect(Collectors.toList()) : new ArrayList<>())

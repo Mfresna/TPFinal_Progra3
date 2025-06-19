@@ -14,6 +14,9 @@ import java.util.List;
 @Data
 @Schema(description = "DTO para crear o actualizar un Estudio de Arquitectura, incluyendo obras y arquitectos asociados.")
 public class EstudioArqDTO {
+
+    private Long id;
+
     @Schema(
             description = "Nombre del estudio de arquitectura",
             example = "Estudio Sur Arquitectos",
